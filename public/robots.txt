@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://www.notaire-ogoula-gabon.com/sitemap.xml

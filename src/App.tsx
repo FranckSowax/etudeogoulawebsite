@@ -73,9 +73,9 @@ function App() {
   const services = [
     {
       icon: <Home className="w-8 h-8" />,
-      title: 'Droit Immobilier',
-      description: 'Actes de vente, donation, partage, hypothèques, baux commerciaux et résidentiels. Sécurisez vos transactions immobilières avec notre expertise.',
-      items: ['Vente et achat immobilier', 'Donation entre vifs', 'Partage de biens', 'Hypothèques et cautions']
+      title: 'Achat & Vente Immobilier au Gabon',
+      description: 'Notaire spécialisé en achat immobilier au Gabon : actes de vente, donation, partage, hypothèques et baux. Sécurisez vos transactions immobilières à Libreville.',
+      items: ['Achat immobilier au Gabon', 'Vente et cession immobilière', 'Donation et partage de biens', 'Hypothèques et cautions']
     },
     {
       icon: <Users className="w-8 h-8" />,
@@ -119,8 +119,9 @@ function App() {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Navigation - Not sticky, positioned over hero */}
-      <nav className="absolute top-0 left-0 right-0 z-50 bg-transparent">
+      {/* Navigation */}
+      <header>
+      <nav className="absolute top-0 left-0 right-0 z-50 bg-transparent" aria-label="Navigation principale">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-20">
             <a href="#accueil" className="flex items-center gap-3">
@@ -190,13 +191,15 @@ function App() {
           </div>
         )}
       </nav>
+      </header>
 
+      <main>
       {/* Hero Section */}
       <section id="accueil" className="relative min-h-screen flex items-center">
         <div className="absolute inset-0">
           <img
             src="/hero-notary.jpg"
-            alt="Cabinet Notarial"
+            alt="Cabinet notarial pour achat immobilier au Gabon - Notaire Ogoula Nkondawiri à Libreville"
             className="w-full h-full object-cover"
           />
           <div className="absolute inset-0 bg-gradient-to-r from-[#1a2a4a]/95 via-[#1a2a4a]/80 to-[#1a2a4a]/50" />
@@ -212,15 +215,15 @@ function App() {
             </div>
             
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-serif font-bold text-white mb-6 leading-tight">
-              Cabinet Notarial<br />
+              Notaire au Gabon<br />
               <span className="text-[#c9a227]">Suzanne Ogoula</span><br />
               Nkondawiri
             </h1>
-            
+
             <p className="text-lg sm:text-xl text-gray-200 mb-8 leading-relaxed">
-              Expertise notariale au service de vos projets. Sécurité juridique, 
-              conseil personnalisé et accompagnement dans toutes vos démarches 
-              à Libreville, Gabon.
+              Votre notaire pour l'achat immobilier au Gabon. Sécurité juridique,
+              conseil personnalisé et accompagnement dans toutes vos démarches
+              notariales à Libreville.
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4">
@@ -264,8 +267,9 @@ function App() {
               <div className="relative z-10">
                 <img
                   src="/notary-portrait.jpg"
-                  alt="Maître Suzanne Ogoula Nkondawiri"
+                  alt="Maître Suzanne Ogoula Nkondawiri - Notaire à Libreville, Gabon"
                   className="w-full max-w-md mx-auto rounded-lg shadow-elegant"
+                  loading="lazy"
                 />
               </div>
               <div className="absolute -bottom-6 -right-6 w-48 h-48 bg-[#c9a227]/10 rounded-lg -z-0" />
@@ -293,20 +297,20 @@ function App() {
               </div>
               
               <h2 className="text-3xl sm:text-4xl font-serif font-bold text-[#1a2a4a] mb-6">
-                Une Expertise Notariale au Service du Gabon
+                Votre Notaire de Confiance pour l'Achat Immobilier au Gabon
               </h2>
-              
+
               <p className="text-muted-foreground mb-6 leading-relaxed">
-                Le Cabinet Notarial Suzanne Ogoula Nkondawiri est une étude de notariat 
-                établie à Libreville, capitale de la République Gabonaise. Sous la direction 
-                de Maître Suzanne Ogoula Nkondawiri, notaire titulaire, nous mettons notre 
-                expertise et notre rigueur au service de particuliers et d'entreprises.
+                Le Cabinet Notarial Suzanne Ogoula Nkondawiri est une étude de notariat
+                établie à Libreville, capitale de la République Gabonaise. Spécialisé dans
+                l'achat et la vente immobilière au Gabon, notre cabinet accompagne
+                particuliers et entreprises dans toutes leurs transactions notariales.
               </p>
-              
+
               <p className="text-muted-foreground mb-8 leading-relaxed">
-                Notre mission est d'assurer la sécurité juridique de vos actes et de vous 
-                accompagner dans vos projets les plus importants : achat immobilier, 
-                constitution de société, succession, mariage, et bien d'autres.
+                Que vous souhaitiez acheter un bien immobilier au Gabon, constituer une
+                société, régler une succession ou préparer un contrat de mariage, notre
+                notaire vous garantit la sécurité juridique de chaque acte.
               </p>
 
               <div className="grid sm:grid-cols-2 gap-4 mb-8">
@@ -364,12 +368,12 @@ function App() {
             </div>
             
             <h2 className="text-3xl sm:text-4xl font-serif font-bold text-[#1a2a4a] mb-4">
-              Services Notariaux Complets
+              Services Notariaux au Gabon : Achat, Vente et Conseil Juridique
             </h2>
-            
+
             <p className="text-muted-foreground">
-              Notre cabinet offre une gamme complète de services notariaux pour répondre 
-              à tous vos besoins juridiques, personnels et professionnels.
+              Notre cabinet notarial à Libreville offre une gamme complète de services :
+              achat immobilier, vente, succession, droit des affaires et actes authentiques au Gabon.
             </p>
           </div>
 
@@ -446,13 +450,13 @@ function App() {
               </div>
               
               <h2 className="text-3xl sm:text-4xl font-serif font-bold text-[#1a2a4a] mb-6">
-                Prendre Rendez-vous
+                Rendez-vous avec votre Notaire à Libreville
               </h2>
-              
+
               <p className="text-muted-foreground mb-8 leading-relaxed">
-                Planifiez votre consultation avec Maître Suzanne Ogoula Nkondawiri. 
-                Nous vous recevons du lundi au vendredi de 7h30 à 15h30. Remplissez 
-                le formulaire et nous vous contacterons pour confirmer votre rendez-vous.
+                Planifiez votre consultation pour un achat immobilier au Gabon ou toute
+                autre démarche notariale avec Maître Suzanne Ogoula Nkondawiri.
+                Nous vous recevons du lundi au vendredi de 7h30 à 15h30.
               </p>
 
               <div className="space-y-6">
@@ -640,12 +644,12 @@ function App() {
               </div>
               
               <h2 className="text-3xl sm:text-4xl font-serif font-bold text-white mb-6">
-                Contactez Notre Cabinet
+                Contactez votre Notaire au Gabon
               </h2>
-              
+
               <p className="text-gray-300 mb-8 leading-relaxed">
-                Notre équipe est à votre disposition pour répondre à toutes vos questions 
-                et vous accompagner dans vos démarches notariales.
+                Notre cabinet notarial à Libreville est à votre disposition pour tout
+                achat immobilier au Gabon, conseil juridique et démarches notariales.
               </p>
 
               <div className="space-y-6">
@@ -750,6 +754,7 @@ function App() {
           </div>
         </div>
       </section>
+      </main>
 
       {/* Footer */}
       <footer className="bg-[#0f1a2e] py-12">
@@ -799,10 +804,10 @@ function App() {
 
           <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="text-gray-500 text-sm">
-              © 2024 Cabinet Notarial Suzanne Ogoula Nkondawiri. Tous droits réservés.
+              © 2025 Cabinet Notarial Suzanne Ogoula Nkondawiri. Tous droits réservés.
             </p>
             <p className="text-gray-500 text-sm">
-              Notaire à Libreville, République Gabonaise
+              Notaire achat immobilier Gabon — Libreville, République Gabonaise
             </p>
           </div>
         </div>
