@@ -1,8 +1,7 @@
 import { useState } from 'react'
 import { 
-  Scale, 
-  BookOpen, 
-  FileText, 
+  BookOpen,
+  FileText,
   Home, 
   Users, 
   Building2, 
@@ -97,7 +96,7 @@ function App() {
       items: ['Testaments et codicilles', 'Procurations', 'Reconnaissance de dette', 'Déclarations diverses']
     },
     {
-      icon: <Scale className="w-8 h-8" />,
+      icon: <img src="/logo.png" alt="Logo" className="w-8 h-8 object-contain" />,
       title: 'Conseil Juridique',
       description: 'Consultations personnalisées pour tous vos projets. Analyse juridique approfondie et solutions adaptées à votre situation.',
       items: ['Consultation notariale', 'Planification successorale', 'Optimisation fiscale', 'Médiation familiale']
@@ -125,9 +124,7 @@ function App() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-20">
             <a href="#accueil" className="flex items-center gap-3">
-              <div className="w-12 h-12 gradient-navy rounded-lg flex items-center justify-center">
-                <Scale className="w-6 h-6 text-[#c9a227]" />
-              </div>
+              <img src="/logo.png" alt="Cabinet Notarial S.O. Nkondawiri" className="h-14 w-auto" />
               <div className="hidden sm:block">
                 <p className="font-serif font-semibold text-lg leading-tight text-white">
                   Cabinet Notarial
@@ -760,9 +757,7 @@ function App() {
           <div className="grid md:grid-cols-4 gap-8 mb-8">
             <div className="md:col-span-2">
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-10 h-10 gradient-navy rounded-lg flex items-center justify-center border border-[#c9a227]/30">
-                  <Scale className="w-5 h-5 text-[#c9a227]" />
-                </div>
+                <img src="/logo.png" alt="Cabinet Notarial S.O. Nkondawiri" className="h-12 w-auto" />
                 <div>
                   <p className="font-serif font-semibold text-white">Cabinet Notarial</p>
                   <p className="text-xs text-[#c9a227]">S.O. Nkondawiri</p>
