@@ -1,0 +1,72 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 40 30% 97%;
+    --foreground: 220 30% 15%;
+    --card: 40 30% 99%;
+    --card-foreground: 220 30% 15%;
+    --popover: 40 30% 99%;
+    --popover-foreground: 220 30% 15%;
+    --primary: 220 40% 25%;
+    --primary-foreground: 40 30% 97%;
+    --secondary: 43 50% 55%;
+    --secondary-foreground: 220 30% 15%;
+    --muted: 40 20% 92%;
+    --muted-foreground: 220 15% 45%;
+    --accent: 43 50% 55%;
+    --accent-foreground: 220 30% 15%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 40 20% 88%;
+    --input: 40 20% 88%;
+    --ring: 43 50% 55%;
+    --radius: 0.5rem;
+    --sidebar-background: 40 30% 97%;
+    --sidebar-foreground: 220 30% 15%;
+    --sidebar-primary: 220 40% 25%;
+    --sidebar-primary-foreground: 40 30% 97%;
+    --sidebar-accent: 40 20% 92%;
+    --sidebar-accent-foreground: 220 30% 15%;
+    --sidebar-border: 40 20% 88%;
+    --sidebar-ring: 43 50% 55%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: 'Inter', sans-serif;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Playfair Display', serif;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  .gradient-gold {
+    background: linear-gradient(135deg, #c9a227 0%, #e8d5a3 50%, #c9a227 100%);
+  }
+  .gradient-navy {
+    background: linear-gradient(135deg, #1a2a4a 0%, #2d3e5f 100%);
+  }
+  .shadow-elegant {
+    box-shadow: 0 10px 40px -10px rgba(26, 42, 74, 0.15);
+  }
+  .border-gold {
+    border-color: #c9a227;
+  }
+}
