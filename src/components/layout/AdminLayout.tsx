@@ -42,8 +42,11 @@ export default function AdminLayout() {
       <header className="bg-navy shadow-sm sticky top-0 z-40">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-14">
           <div className="flex items-center gap-5">
-            <Link to="/" className="font-serif text-white font-semibold text-sm whitespace-nowrap">
-              Cabinet Ogoula
+            <Link to="/" className="flex items-center gap-2 flex-shrink-0">
+              <img src="/logo.png" alt="Cabinet Ogoula" className="h-8 w-auto" />
+              <span className="font-serif text-white font-semibold text-sm whitespace-nowrap hidden sm:inline">
+                Cabinet Ogoula
+              </span>
             </Link>
             <nav className="flex items-center gap-0.5">
               {navLinks.map(({ to, label, icon: Icon, exact }) => {
