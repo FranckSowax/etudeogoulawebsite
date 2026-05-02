@@ -1,114 +1,55 @@
-# Supabase — Phase 2 (RDV en ligne)
+# Supabase — schéma & RPC
 
-## Contenu
+Cette partie ne contient désormais plus que la migration SQL.
+Les fonctions serveur (notifications WhatsApp, sync Google Calendar,
+rappels automatiques) sont implémentées en **Netlify Functions** —
+voir [`netlify/README.md`](../netlify/README.md).
 
-- `migrations/20260502_appointments_v2.sql` — étend la table `appointments` (motif, type, durée, statut, token d'annulation, IDs GCal/Whapi, horodatages des rappels) et expose 3 RPC publiques :
-  - `get_busy_slots(start_date, end_date)` — retourne uniquement les créneaux pris (date/heure/durée), sans données personnelles. Utilisé par le wizard front pour calculer les disponibilités.
-  - `cancel_appointment_by_token(uuid)` — annulation 1-clic via le lien envoyé par WhatsApp.
-  - `get_appointment_by_token(uuid)` — récap pour la page de confirmation.
+## Migration
 
-- `functions/appointment-created/` — déclenchée à l'insertion d'un rendez-vous : crée un événement Google Calendar (avec lien Meet si visio) et envoie la confirmation WhatsApp via Whapi.
-- `functions/appointment-reminder/` — programmée toutes les 15 min : envoie le rappel J-1 et H-2 par WhatsApp.
-- `functions/appointment-cancel/` — déclenchée quand un statut passe à `cancelled` : supprime l'événement GCal + envoie un message WhatsApp d'accusé d'annulation.
+`migrations/20260502_appointments_v2.sql` étend la table `appointments`
+et expose 3 RPC publiques (security definer, sans fuite de PII vers
+l'anon key) :
 
-## Déploiement
+- `get_busy_slots(start_date, end_date)` — créneaux pris pour le wizard
+- `cancel_appointment_by_token(uuid)` — annulation 1-clic
+- `get_appointment_by_token(uuid)` — récap pour la page de confirmation
 
-### 1. Appliquer la migration
+### Appliquer
 
 ```bash
-# Avec la CLI Supabase liée au projet :
+# Avec la CLI Supabase liée :
 supabase db push
 
-# Ou directement via SQL Editor : copier-coller le contenu de
-# migrations/20260502_appointments_v2.sql
+# Ou directement dans le SQL Editor du dashboard :
+# copier-coller le contenu de migrations/20260502_appointments_v2.sql
 ```
 
-### 2. Variables d'environnement (Settings → Functions → Secrets)
+La migration est idempotente (`if not exists` / `or replace`) et peut
+être ré-appliquée sans risque.
 
-```
-SUPABASE_URL                   = https://xxx.supabase.co
-SUPABASE_SERVICE_ROLE_KEY      = (copié depuis Project Settings → API)
-SITE_URL                       = https://etudeogoulankondawiri.netlify.app
+## Variables d'environnement
 
-WHAPI_TOKEN                    = (depuis le dashboard Whapi)
+Dans Netlify (Site settings → Environment variables) :
 
-GCAL_CALENDAR_ID               = cabinet@notaire-nkondawiri.ga (ou …@group.calendar.google.com)
-GCAL_TIMEZONE                  = Africa/Libreville
-GCAL_SERVICE_ACCOUNT_KEY       = (JSON brut OU base64 de la clé)
-```
+| Nom | Description |
+|---|---|
+| `SUPABASE_URL` | URL du projet Supabase |
+| `SUPABASE_SERVICE_ROLE_KEY` | Clé service role (Project Settings → API) |
+| `WHAPI_TOKEN` | Token Whapi.cloud |
+| `GCAL_CALENDAR_ID` | ID de l'agenda Google partagé |
+| `GCAL_TIMEZONE` | `Africa/Libreville` |
+| `GCAL_SERVICE_ACCOUNT_KEY` | Clé JSON du Service Account (raw ou base64) |
+| `SITE_URL` | URL publique du site (ex. `https://etudeogoulankondawiri.netlify.app`) |
 
-Pour le compte de service Google : créer un projet GCP → activer l'API Google
-Calendar → créer un service account → générer une clé JSON → partager l'agenda
-visé avec l'email du service account (rôle « apporter des modifications aux
-événements »).
-
-### 3. Déployer les fonctions
-
-```bash
-supabase functions deploy appointment-created
-supabase functions deploy appointment-reminder
-supabase functions deploy appointment-cancel
-```
-
-### 4. Déclencher `appointment-created` à l'insertion
-
-Deux options :
-
-**A. Database Webhook (recommandé)**
-Project Settings → Database → Webhooks → Create webhook :
-- Table : `appointments`
-- Events : `Insert`
-- Type : Supabase Edge Function
-- Function : `appointment-created`
-
-**B. Postgres Trigger via `pg_net`**
-```sql
-create or replace function public.notify_appointment_created()
-returns trigger language plpgsql security definer as $$
-begin
-  perform net.http_post(
-    url := current_setting('app.functions_url') || '/appointment-created',
-    headers := jsonb_build_object(
-      'Authorization', 'Bearer ' || current_setting('app.service_role_key'),
-      'Content-Type', 'application/json'
-    ),
-    body := jsonb_build_object('record', row_to_json(NEW))
-  );
-  return NEW;
-end$$;
-
-create trigger appointments_after_insert
-after insert on public.appointments
-for each row execute function public.notify_appointment_created();
-```
-
-### 5. Cron pour les rappels (J-1 et H-2)
-
-Project Settings → Edge Functions → Schedules :
-- Function : `appointment-reminder`
-- Schedule : `*/15 * * * *` (toutes les 15 min)
-
-### 6. Webhook d'annulation
-
-Database Webhook sur `appointments` :
-- Events : `Update`
-- Filter (optionnel) : `status = 'cancelled'`
-- Function : `appointment-cancel`
-
-## Tester en local (CLI)
-
-```bash
-supabase start
-supabase functions serve --env-file ./supabase/.env.local
-
-# Tester appointment-created :
-curl -X POST http://localhost:54321/functions/v1/appointment-created \
-  -H "Content-Type: application/json" \
-  -d '{"record":{"id":"...","name":"Jean","phone":"+24107000000","date":"2026-05-15","time":"10:00","type":"cabinet","motif":"Achat immobilier","duration_minutes":45,"cancellation_token":"..."}}'
-```
+Les variables `VITE_SUPABASE_URL` et `VITE_SUPABASE_ANON_KEY` doivent
+aussi être présentes pour le client Vite.
 
 ## Sécurité
 
-- Les RPC `get_busy_slots`, `cancel_appointment_by_token` et `get_appointment_by_token` sont en `security definer` mais **ne renvoient pas** d'informations personnelles à l'anon (pas de nom, téléphone, email).
-- Le token d'annulation est un UUID v4 (~122 bits d'entropie), valable une seule fois côté pratique (l'annulation est idempotente sur un statut déjà `cancelled`).
-- Les Edge Functions tournent côté serveur et peuvent utiliser la `service_role_key` sans l'exposer au client.
+- Les RPC sont en `security definer` mais ne renvoient pas le
+  téléphone, l'email, le nom (sauf pour `get_appointment_by_token`,
+  qui exige le token aléatoire en input).
+- Le `cancellation_token` est un UUID v4 (~122 bits d'entropie).
+- La `service_role_key` ne quitte jamais Netlify (utilisée uniquement
+  côté Functions, jamais exposée au client).

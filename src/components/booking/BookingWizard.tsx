@@ -95,6 +95,15 @@ export default function BookingWizard() {
       return
     }
 
+    // Fire-and-forget: trigger Netlify Function to create the GCal event
+    // and send the WhatsApp confirmation. Failures here are logged but
+    // don't block the user — the row is already in DB.
+    fetch('/api/appointments/created', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ token: data.cancellation_token }),
+    }).catch((err) => console.error('appointment-created webhook failed', err))
+
     navigate(`/rendez-vous/confirmation/${data.cancellation_token}`)
   }
 

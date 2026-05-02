@@ -21,6 +21,15 @@ export default function Annulation() {
       toast.error("Impossible d'annuler ce rendez-vous (lien expiré ou déjà annulé).")
       return
     }
+
+    // Fire-and-forget: tell the Netlify Function to drop the GCal event
+    // and send the WhatsApp ack. Failures don't block the user.
+    fetch('/api/appointments/cancel', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ token }),
+    }).catch((err) => console.error('appointment-cancel webhook failed', err))
+
     setDone(true)
     toast.success('Rendez-vous annulé.')
   }

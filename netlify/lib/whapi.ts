@@ -3,18 +3,18 @@
 
 const WHAPI_BASE = 'https://gate.whapi.cloud'
 
-export type WhapiMessage = { id?: string; sent: boolean; error?: string }
+export type WhapiResult = { id?: string; sent: boolean; error?: string }
 
 function getEnv(name: string): string {
-  const value = Deno.env.get(name)
+  const value = process.env[name]
   if (!value) throw new Error(`Missing env var: ${name}`)
   return value
 }
 
-/** Normalize a phone number into the E.164-ish format Whapi expects (no plus, digits only). */
+/** Normalize a phone number into the digits-only format Whapi expects. */
 export function normalizePhone(raw: string): string {
   let digits = raw.replace(/[^\d]/g, '')
-  // Default to Gabon country code if none provided (8 digits = local format)
+  // Default to Gabon country code if local 8-digit number provided
   if (digits.length === 8) digits = '241' + digits
   return digits
 }
@@ -22,7 +22,7 @@ export function normalizePhone(raw: string): string {
 export async function sendWhatsappText(
   toRaw: string,
   body: string,
-): Promise<WhapiMessage> {
+): Promise<WhapiResult> {
   const token = getEnv('WHAPI_TOKEN')
   const to = normalizePhone(toRaw)
 
@@ -62,16 +62,16 @@ export function buildConfirmationMessage(args: {
     `📌 Motif : ${args.motif}`,
   ]
   if (args.type === 'cabinet') {
-    lines.push('📍 Lieu : Bd de la Nation, Imm. Hollando, 6e étage, Libreville')
+    lines.push("📍 Lieu : Bd de la Nation, Imm. Hollando, 6e étage, Libreville")
   } else if (args.type === 'visio') {
     lines.push(args.meetLink ? `🎥 Visio : ${args.meetLink}` : '🎥 Visio (lien à suivre)')
   } else {
-    lines.push('☎️ Le cabinet vous appellera au numéro indiqué.')
+    lines.push("☎️ Le cabinet vous appellera au numéro indiqué.")
   }
   lines.push('')
   lines.push(`Pour annuler ou reporter : ${args.cancelUrl}`)
   lines.push('')
-  lines.push("À bientôt — Cabinet Ogoula Nkondawiri")
+  lines.push('À bientôt — Cabinet Ogoula Nkondawiri')
   return lines.join('\n')
 }
 

@@ -4,10 +4,10 @@
 //
 // Required env vars:
 //   - GCAL_CALENDAR_ID         (e.g. cabinet@notaire.com or *@group.calendar.google.com)
-//   - GCAL_SERVICE_ACCOUNT_KEY (the JSON key, base64-encoded)
-//   - GCAL_TIMEZONE            (e.g. Africa/Libreville)
+//   - GCAL_SERVICE_ACCOUNT_KEY (the JSON key, raw or base64-encoded)
+//   - GCAL_TIMEZONE            (defaults to Africa/Libreville)
 
-import { create as createJwt, getNumericDate } from 'https://deno.land/x/djwt@v3.0.2/mod.ts'
+import { SignJWT, importPKCS8 } from 'jose'
 
 type ServiceAccount = {
   client_email: string
@@ -15,49 +15,35 @@ type ServiceAccount = {
   token_uri: string
 }
 
-function getEnv(name: string): string {
-  const value = Deno.env.get(name)
+function getEnv(name: string, fallback?: string): string {
+  const value = process.env[name] ?? fallback
   if (!value) throw new Error(`Missing env var: ${name}`)
   return value
 }
 
-async function loadServiceAccount(): Promise<ServiceAccount> {
+function loadServiceAccount(): ServiceAccount {
   const raw = getEnv('GCAL_SERVICE_ACCOUNT_KEY')
-  // Accept either a raw JSON or a base64-encoded JSON
-  const decoded = raw.trim().startsWith('{') ? raw : new TextDecoder().decode(
-    Uint8Array.from(atob(raw), (c) => c.charCodeAt(0)),
-  )
+  // Accept either raw JSON or base64-encoded JSON
+  const decoded = raw.trim().startsWith('{')
+    ? raw
+    : Buffer.from(raw, 'base64').toString('utf-8')
   return JSON.parse(decoded) as ServiceAccount
 }
 
 async function getAccessToken(): Promise<string> {
-  const sa = await loadServiceAccount()
-  const now = getNumericDate(0)
-  const exp = getNumericDate(60 * 60)
+  const sa = loadServiceAccount()
+  const now = Math.floor(Date.now() / 1000)
 
-  const pemHeader = '-----BEGIN PRIVATE KEY-----'
-  const pemFooter = '-----END PRIVATE KEY-----'
-  const pemContents = sa.private_key.replace(pemHeader, '').replace(pemFooter, '').replace(/\s/g, '')
-  const binary = Uint8Array.from(atob(pemContents), (c) => c.charCodeAt(0))
-  const key = await crypto.subtle.importKey(
-    'pkcs8',
-    binary,
-    { name: 'RSASSA-PKCS1-v1_5', hash: 'SHA-256' },
-    false,
-    ['sign'],
-  )
-
-  const jwt = await createJwt(
-    { alg: 'RS256', typ: 'JWT' },
-    {
-      iss: sa.client_email,
-      scope: 'https://www.googleapis.com/auth/calendar',
-      aud: sa.token_uri,
-      iat: now,
-      exp,
-    },
-    key,
-  )
+  const privateKey = await importPKCS8(sa.private_key, 'RS256')
+  const jwt = await new SignJWT({
+    scope: 'https://www.googleapis.com/auth/calendar',
+  })
+    .setProtectedHeader({ alg: 'RS256', typ: 'JWT' })
+    .setIssuer(sa.client_email)
+    .setAudience(sa.token_uri)
+    .setIssuedAt(now)
+    .setExpirationTime(now + 60 * 60)
+    .sign(privateKey)
 
   const res = await fetch(sa.token_uri, {
     method: 'POST',
@@ -68,7 +54,9 @@ async function getAccessToken(): Promise<string> {
     }),
   })
 
-  if (!res.ok) throw new Error(`Google token exchange failed: ${res.status} ${await res.text()}`)
+  if (!res.ok) {
+    throw new Error(`Google token exchange failed: ${res.status} ${await res.text()}`)
+  }
   const json = (await res.json()) as { access_token: string }
   return json.access_token
 }
@@ -88,7 +76,7 @@ export async function createEvent(args: {
 }): Promise<GcalEvent> {
   const token = await getAccessToken()
   const calendarId = encodeURIComponent(getEnv('GCAL_CALENDAR_ID'))
-  const tz = Deno.env.get('GCAL_TIMEZONE') ?? 'Africa/Libreville'
+  const tz = getEnv('GCAL_TIMEZONE', 'Africa/Libreville')
 
   const body: Record<string, unknown> = {
     summary: args.summary,
@@ -120,7 +108,7 @@ export async function createEvent(args: {
   )
 
   if (!res.ok) throw new Error(`GCal create failed: ${res.status} ${await res.text()}`)
-  const json = await res.json()
+  const json = (await res.json()) as { id: string; hangoutLink?: string }
   return { id: json.id, hangoutLink: json.hangoutLink }
 }
 
@@ -131,7 +119,8 @@ export async function deleteEvent(eventId: string): Promise<void> {
     `https://www.googleapis.com/calendar/v3/calendars/${calendarId}/events/${eventId}`,
     { method: 'DELETE', headers: { Authorization: `Bearer ${token}` } },
   )
-  if (!res.ok && res.status !== 410) {
+  // 410 Gone is fine — already deleted
+  if (!res.ok && res.status !== 410 && res.status !== 404) {
     throw new Error(`GCal delete failed: ${res.status} ${await res.text()}`)
   }
 }
