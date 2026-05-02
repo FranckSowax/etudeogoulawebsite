@@ -5,12 +5,20 @@
 // Marks the corresponding column to avoid duplicate sends.
 
 import type { Config } from '@netlify/functions'
-import { buildReminderMessage, sendWhatsappText } from '../lib/whapi'
+import { buildReminderMessage, isWhapiConfigured, sendWhatsappText } from '../lib/whapi'
 import { getSupabaseAdmin, type AppointmentRow } from '../lib/supabase'
 
 const SITE_URL = process.env.SITE_URL ?? 'https://etudeogoulankondawiri.netlify.app'
 
 export default async () => {
+  // No WhatsApp = no point running. Return cleanly.
+  if (!isWhapiConfigured()) {
+    return new Response(
+      JSON.stringify({ ok: true, skipped: true, reason: 'WHAPI_TOKEN not configured' }),
+      { status: 200, headers: { 'Content-Type': 'application/json' } },
+    )
+  }
+
   const supabase = getSupabaseAdmin()
 
   const now = new Date()

@@ -5,8 +5,8 @@
 //   - sends a WhatsApp acknowledgement to the client.
 
 import type { Config, Context } from '@netlify/functions'
-import { sendWhatsappText } from '../lib/whapi'
-import { deleteEvent } from '../lib/gcal'
+import { isWhapiConfigured, sendWhatsappText } from '../lib/whapi'
+import { deleteEvent, isGcalConfigured } from '../lib/gcal'
 import { getSupabaseAdmin, type AppointmentRow } from '../lib/supabase'
 
 export default async (req: Request, _context: Context) => {
@@ -35,30 +35,32 @@ export default async (req: Request, _context: Context) => {
     return cors(json({ ok: false, error: 'Appointment is not cancelled' }, 400))
   }
 
-  try {
-    if (appt.gcal_event_id) {
-      try {
-        await deleteEvent(appt.gcal_event_id)
-      } catch (err) {
-        console.error('GCal delete failed', err)
-      }
+  let gcalDeleted = false
+  if (appt.gcal_event_id && isGcalConfigured()) {
+    try {
+      await deleteEvent(appt.gcal_event_id)
+      gcalDeleted = true
+    } catch (err) {
+      console.error('GCal delete failed (continuing)', err)
     }
-
-    await sendWhatsappText(
-      appt.phone,
-      `Bonjour ${appt.name}, votre rendez-vous du ${appt.date} à ${appt.time} a bien été annulé. Vous pouvez réserver un nouveau créneau sur notre site. Cabinet Ogoula Nkondawiri.`,
-    )
-
-    await supabase
-      .from('appointments')
-      .update({ gcal_event_id: null })
-      .eq('id', appt.id)
-
-    return cors(json({ ok: true }))
-  } catch (err) {
-    console.error('appointment-cancel failed', err)
-    return cors(json({ ok: false, error: (err as Error).message }, 500))
   }
+
+  let whatsappSent = false
+  if (isWhapiConfigured()) {
+    try {
+      const r = await sendWhatsappText(
+        appt.phone,
+        `Bonjour ${appt.name}, votre rendez-vous du ${appt.date} à ${appt.time} a bien été annulé. Vous pouvez réserver un nouveau créneau sur notre site. Cabinet Ogoula Nkondawiri.`,
+      )
+      whatsappSent = r.sent
+    } catch (err) {
+      console.error('WhatsApp ack failed (continuing)', err)
+    }
+  }
+
+  await supabase.from('appointments').update({ gcal_event_id: null }).eq('id', appt.id)
+
+  return cors(json({ ok: true, gcalDeleted, whatsappSent }))
 }
 
 export const config: Config = {

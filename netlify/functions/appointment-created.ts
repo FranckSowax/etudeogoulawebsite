@@ -4,8 +4,8 @@
 // sends the WhatsApp confirmation via Whapi. Marks the row as 'confirmed'.
 
 import type { Config, Context } from '@netlify/functions'
-import { buildConfirmationMessage, sendWhatsappText } from '../lib/whapi'
-import { buildISODate, createEvent } from '../lib/gcal'
+import { buildConfirmationMessage, isWhapiConfigured, sendWhatsappText } from '../lib/whapi'
+import { buildISODate, createEvent, isGcalConfigured } from '../lib/gcal'
 import { getSupabaseAdmin, type AppointmentRow } from '../lib/supabase'
 
 const SITE_URL = process.env.SITE_URL ?? 'https://etudeogoulankondawiri.netlify.app'
@@ -41,58 +41,96 @@ export default async (req: Request, _context: Context) => {
     return cors(json({ ok: true, alreadyProcessed: true }))
   }
 
-  try {
-    const { startISO, endISO } = buildISODate(
-      appt.date,
-      appt.time,
-      appt.duration_minutes ?? 30,
-    )
+  // Each integration is optional and isolated: a failure in one (or
+  // missing config) doesn't cancel the others or fail the whole call.
+  let gcalEventId: string | null = null
+  let gcalMeetLink: string | null = null
+  let gcalSkipped = false
+  let gcalError: string | null = null
 
-    const event = await createEvent({
-      summary: `RDV — ${appt.name} (${appt.motif ?? appt.service ?? ''})`,
-      description: [
-        `Téléphone : ${appt.phone}`,
-        appt.email ? `Email : ${appt.email}` : null,
-        appt.message ? `Note : ${appt.message}` : null,
-        `Modalité : ${appt.type}`,
-      ]
-        .filter(Boolean)
-        .join('\n'),
-      startISO,
-      endISO,
-      attendeeEmail: appt.email ?? undefined,
-      withMeet: appt.type === 'visio',
-    })
-
-    const cancelUrl = `${SITE_URL}/rendez-vous/annuler/${appt.cancellation_token}`
-    const whapi = await sendWhatsappText(
-      appt.phone,
-      buildConfirmationMessage({
-        name: appt.name,
-        motif: appt.motif ?? '',
-        date: appt.date,
-        time: appt.time,
-        type: appt.type,
-        meetLink: event.hangoutLink,
-        cancelUrl,
-      }),
-    )
-
-    await supabase
-      .from('appointments')
-      .update({
-        status: 'confirmed',
-        gcal_event_id: event.id,
-        gcal_meet_link: event.hangoutLink ?? null,
-        whapi_confirm_message_id: whapi.id ?? null,
+  if (isGcalConfigured()) {
+    try {
+      const { startISO, endISO } = buildISODate(
+        appt.date,
+        appt.time,
+        appt.duration_minutes ?? 30,
+      )
+      const event = await createEvent({
+        summary: `RDV — ${appt.name} (${appt.motif ?? appt.service ?? ''})`,
+        description: [
+          `Téléphone : ${appt.phone}`,
+          appt.email ? `Email : ${appt.email}` : null,
+          appt.message ? `Note : ${appt.message}` : null,
+          `Modalité : ${appt.type}`,
+        ]
+          .filter(Boolean)
+          .join('\n'),
+        startISO,
+        endISO,
+        attendeeEmail: appt.email ?? undefined,
+        withMeet: appt.type === 'visio',
       })
-      .eq('id', appt.id)
-
-    return cors(json({ ok: true, gcalId: event.id, whatsapp: whapi.sent }))
-  } catch (err) {
-    console.error('appointment-created failed', err)
-    return cors(json({ ok: false, error: (err as Error).message }, 500))
+      gcalEventId = event.id
+      gcalMeetLink = event.hangoutLink ?? null
+    } catch (err) {
+      gcalError = (err as Error).message
+      console.error('GCal create failed (continuing)', err)
+    }
+  } else {
+    gcalSkipped = true
+    console.warn('GCal not configured (GCAL_CALENDAR_ID / GCAL_SERVICE_ACCOUNT_KEY) — skipping')
   }
+
+  let whapi: { sent: boolean; id?: string; error?: string } = { sent: false }
+  if (isWhapiConfigured()) {
+    try {
+      const cancelUrl = `${SITE_URL}/rendez-vous/annuler/${appt.cancellation_token}`
+      whapi = await sendWhatsappText(
+        appt.phone,
+        buildConfirmationMessage({
+          name: appt.name,
+          motif: appt.motif ?? '',
+          date: appt.date,
+          time: appt.time,
+          type: appt.type,
+          meetLink: gcalMeetLink ?? undefined,
+          cancelUrl,
+        }),
+      )
+    } catch (err) {
+      whapi = { sent: false, error: (err as Error).message }
+      console.error('WhatsApp send failed (continuing)', err)
+    }
+  } else {
+    whapi = { sent: false, error: 'WHAPI_TOKEN not configured' }
+  }
+
+  // Promote to 'confirmed' if at least one integration succeeded;
+  // otherwise leave 'pending' so the cabinet can confirm manually.
+  const anySucceeded = Boolean(gcalEventId) || whapi.sent
+  await supabase
+    .from('appointments')
+    .update({
+      status: anySucceeded ? 'confirmed' : 'pending',
+      gcal_event_id: gcalEventId,
+      gcal_meet_link: gcalMeetLink,
+      whapi_confirm_message_id: whapi.id ?? null,
+    })
+    .eq('id', appt.id)
+
+  return cors(
+    json({
+      ok: true,
+      gcal: gcalSkipped
+        ? { skipped: true, reason: 'not configured' }
+        : gcalError
+        ? { sent: false, error: gcalError }
+        : { sent: true, eventId: gcalEventId },
+      whatsapp: whapi.sent
+        ? { sent: true, messageId: whapi.id }
+        : { sent: false, error: whapi.error },
+    }),
+  )
 }
 
 export const config: Config = {

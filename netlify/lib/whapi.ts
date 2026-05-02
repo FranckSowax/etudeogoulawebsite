@@ -5,10 +5,8 @@ const WHAPI_BASE = 'https://gate.whapi.cloud'
 
 export type WhapiResult = { id?: string; sent: boolean; error?: string }
 
-function getEnv(name: string): string {
-  const value = process.env[name]
-  if (!value) throw new Error(`Missing env var: ${name}`)
-  return value
+export function isWhapiConfigured(): boolean {
+  return Boolean(process.env.WHAPI_TOKEN?.trim())
 }
 
 /** Normalize a phone number into the digits-only format Whapi expects. */
@@ -23,7 +21,10 @@ export async function sendWhatsappText(
   toRaw: string,
   body: string,
 ): Promise<WhapiResult> {
-  const token = getEnv('WHAPI_TOKEN')
+  const token = process.env.WHAPI_TOKEN?.trim()
+  if (!token) {
+    return { sent: false, error: 'WHAPI_TOKEN not configured' }
+  }
   const to = normalizePhone(toRaw)
 
   const res = await fetch(`${WHAPI_BASE}/messages/text`, {

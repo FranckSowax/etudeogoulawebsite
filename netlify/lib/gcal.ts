@@ -15,8 +15,16 @@ type ServiceAccount = {
   token_uri: string
 }
 
+/** True if both Calendar ID and Service Account key are non-empty. */
+export function isGcalConfigured(): boolean {
+  return Boolean(
+    process.env.GCAL_CALENDAR_ID?.trim() &&
+      process.env.GCAL_SERVICE_ACCOUNT_KEY?.trim(),
+  )
+}
+
 function getEnv(name: string, fallback?: string): string {
-  const value = process.env[name] ?? fallback
+  const value = process.env[name]?.trim() || fallback
   if (!value) throw new Error(`Missing env var: ${name}`)
   return value
 }
