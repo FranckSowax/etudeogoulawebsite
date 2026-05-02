@@ -12,6 +12,8 @@ const Blog = lazy(() => import('@/pages/Blog'))
 const Faq = lazy(() => import('@/pages/Faq'))
 const Contact = lazy(() => import('@/pages/Contact'))
 const RendezVous = lazy(() => import('@/pages/RendezVous'))
+const Confirmation = lazy(() => import('@/pages/Confirmation'))
+const Annulation = lazy(() => import('@/pages/Annulation'))
 const NotFound = lazy(() => import('@/pages/NotFound'))
 
 function PageFallback() {
@@ -89,6 +91,22 @@ export default function App() {
             element={
               <Suspense fallback={<PageFallback />}>
                 <RendezVous />
+              </Suspense>
+            }
+          />
+          <Route
+            path="rendez-vous/confirmation/:token"
+            element={
+              <Suspense fallback={<PageFallback />}>
+                <Confirmation />
+              </Suspense>
+            }
+          />
+          <Route
+            path="rendez-vous/annuler/:token"
+            element={
+              <Suspense fallback={<PageFallback />}>
+                <Annulation />
               </Suspense>
             }
           />

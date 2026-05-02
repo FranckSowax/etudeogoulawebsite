@@ -2,7 +2,7 @@ import Seo from '@/components/Seo'
 import Hero from '@/sections/Hero'
 import About from '@/sections/About'
 import Services from '@/sections/Services'
-import AppointmentForm from '@/sections/AppointmentForm'
+import AppointmentCta from '@/sections/AppointmentCta'
 import ContactSection from '@/sections/ContactSection'
 
 export default function Home() {
@@ -16,7 +16,7 @@ export default function Home() {
       <Hero />
       <About />
       <Services />
-      <AppointmentForm />
+      <AppointmentCta />
       <ContactSection />
     </>
   )
