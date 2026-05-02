@@ -4,7 +4,23 @@ module.exports = {
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   theme: {
     extend: {
+      fontFamily: {
+        serif: ['"Cormorant Garamond"', '"Playfair Display"', 'Georgia', 'serif'],
+        display: ['"Cormorant Garamond"', '"Playfair Display"', 'Georgia', 'serif'],
+        sans: ['Inter', 'system-ui', 'sans-serif'],
+      },
       colors: {
+        navy: {
+          DEFAULT: "#1a2a4a",
+          light: "#2d3e5f",
+          dark: "#0f1a2e",
+        },
+        gold: {
+          DEFAULT: "#c9a227",
+          light: "#e8d5a3",
+          dark: "#b8941f",
+        },
+        cream: "#f8f6f1",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
