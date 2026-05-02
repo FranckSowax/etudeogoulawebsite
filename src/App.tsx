@@ -1,6 +1,7 @@
 import { lazy, Suspense } from 'react'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import PublicLayout from '@/components/layout/PublicLayout'
+import AdminLayout from '@/components/layout/AdminLayout'
 import Home from '@/pages/Home'
 import './App.css'
 
@@ -16,6 +17,11 @@ const Confirmation = lazy(() => import('@/pages/Confirmation'))
 const Annulation = lazy(() => import('@/pages/Annulation'))
 const NotFound = lazy(() => import('@/pages/NotFound'))
 
+const AdminLogin = lazy(() => import('@/pages/admin/Login'))
+const AdminAgenda = lazy(() => import('@/pages/admin/Agenda'))
+const AdminListe = lazy(() => import('@/pages/admin/Liste'))
+const AdminIndispos = lazy(() => import('@/pages/admin/Indispos'))
+
 function PageFallback() {
   return (
     <div className="min-h-[40vh] flex items-center justify-center">
@@ -28,6 +34,42 @@ export default function App() {
   return (
     <BrowserRouter>
       <Routes>
+        {/* Admin: login has no layout; dashboard pages are under AdminLayout */}
+        <Route
+          path="/admin/login"
+          element={
+            <Suspense fallback={<PageFallback />}>
+              <AdminLogin />
+            </Suspense>
+          }
+        />
+        <Route path="/admin" element={<AdminLayout />}>
+          <Route
+            index
+            element={
+              <Suspense fallback={<PageFallback />}>
+                <AdminAgenda />
+              </Suspense>
+            }
+          />
+          <Route
+            path="liste"
+            element={
+              <Suspense fallback={<PageFallback />}>
+                <AdminListe />
+              </Suspense>
+            }
+          />
+          <Route
+            path="indispos"
+            element={
+              <Suspense fallback={<PageFallback />}>
+                <AdminIndispos />
+              </Suspense>
+            }
+          />
+        </Route>
+
         <Route element={<PublicLayout />}>
           <Route index element={<Home />} />
           <Route
