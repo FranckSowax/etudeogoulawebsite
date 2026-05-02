@@ -5,6 +5,20 @@ const WHAPI_BASE = 'https://gate.whapi.cloud'
 
 export type WhapiResult = { id?: string; sent: boolean; error?: string }
 
+export type InteractiveButton =
+  | { type: 'url'; title: string; id: string; url: string }
+  | { type: 'quick_reply'; title: string; id: string }
+  | { type: 'call'; title: string; id: string; phone_number: string }
+  | { type: 'copy'; title: string; id: string; copy_code: string }
+
+export type InteractivePayload = {
+  header?: { text: string }
+  body: { text: string }
+  footer?: { text: string }
+  action: { buttons: InteractiveButton[] }
+  type: 'button'
+}
+
 export function isWhapiConfigured(): boolean {
   return Boolean(process.env.WHAPI_TOKEN?.trim())
 }
@@ -44,7 +58,34 @@ export async function sendWhatsappText(
   return { sent: true, id: json.message?.id }
 }
 
-export function buildConfirmationMessage(args: {
+export async function sendWhatsappInteractive(
+  toRaw: string,
+  payload: InteractivePayload,
+): Promise<WhapiResult> {
+  const token = process.env.WHAPI_TOKEN?.trim()
+  if (!token) {
+    return { sent: false, error: 'WHAPI_TOKEN not configured' }
+  }
+  const to = normalizePhone(toRaw)
+
+  const res = await fetch(`${WHAPI_BASE}/messages/interactive`, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ ...payload, to }),
+  })
+
+  if (!res.ok) {
+    const text = await res.text()
+    return { sent: false, error: `Whapi ${res.status}: ${text}` }
+  }
+  const json = (await res.json()) as { message?: { id?: string } }
+  return { sent: true, id: json.message?.id }
+}
+
+type ConfirmationArgs = {
   name: string
   motif: string
   date: string
@@ -52,7 +93,71 @@ export function buildConfirmationMessage(args: {
   type: 'cabinet' | 'visio' | 'telephone'
   meetLink?: string
   cancelUrl: string
-}) {
+}
+
+type ReminderArgs = {
+  name: string
+  date: string
+  time: string
+  type: 'cabinet' | 'visio' | 'telephone'
+  hoursBefore: 24 | 2
+  cancelUrl: string
+}
+
+/** Interactive payload with a single "Annuler le RDV" URL button. */
+export function buildConfirmationInteractive(args: ConfirmationArgs): InteractivePayload {
+  const lines = [
+    `Bonjour ${args.name},`,
+    '',
+    `Votre rendez-vous au Cabinet Notarial Suzanne Ogoula Nkondawiri est enregistré :`,
+    '',
+    `📅 ${formatDate(args.date)}`,
+    `🕒 ${args.time}`,
+    `📌 ${args.motif}`,
+  ]
+  if (args.type === 'cabinet') {
+    lines.push('📍 Bd de la Nation, Imm. Hollando, 6e étage, Libreville')
+  } else if (args.type === 'visio') {
+    lines.push(args.meetLink ? `🎥 Visio : ${args.meetLink}` : '🎥 Visio (lien à suivre)')
+  } else {
+    lines.push("☎️ Le cabinet vous appellera au numéro indiqué.")
+  }
+
+  return {
+    body: { text: lines.join('\n') },
+    footer: { text: 'Cabinet Ogoula Nkondawiri' },
+    action: {
+      buttons: [
+        { type: 'url', title: 'Annuler le RDV', id: 'cancel', url: args.cancelUrl },
+      ],
+    },
+    type: 'button',
+  }
+}
+
+/** Interactive payload for reminders with a single "Annuler le RDV" URL button. */
+export function buildReminderInteractive(args: ReminderArgs): InteractivePayload {
+  const when = args.hoursBefore === 24 ? 'demain' : 'dans 2 heures'
+  const lines = [
+    `Rappel : votre rendez-vous est ${when} à ${args.time} (${formatDate(args.date)}).`,
+  ]
+  if (args.type === 'cabinet') {
+    lines.push('📍 Bd de la Nation, Imm. Hollando, 6e étage, Libreville.')
+  }
+  return {
+    header: { text: `Bonjour ${args.name}` },
+    body: { text: lines.join('\n') },
+    footer: { text: 'Cabinet Ogoula Nkondawiri' },
+    action: {
+      buttons: [
+        { type: 'url', title: 'Annuler le RDV', id: 'cancel', url: args.cancelUrl },
+      ],
+    },
+    type: 'button',
+  }
+}
+
+export function buildConfirmationMessage(args: ConfirmationArgs) {
   const lines = [
     `Bonjour ${args.name},`,
     '',
@@ -76,14 +181,7 @@ export function buildConfirmationMessage(args: {
   return lines.join('\n')
 }
 
-export function buildReminderMessage(args: {
-  name: string
-  date: string
-  time: string
-  type: 'cabinet' | 'visio' | 'telephone'
-  hoursBefore: 24 | 2
-  cancelUrl: string
-}) {
+export function buildReminderMessage(args: ReminderArgs) {
   const when = args.hoursBefore === 24 ? 'demain' : 'dans 2 heures'
   const lines = [
     `Bonjour ${args.name}, rappel : votre rendez-vous est ${when} à ${args.time} (${formatDate(args.date)}).`,

@@ -4,7 +4,13 @@
 // sends the WhatsApp confirmation via Whapi. Marks the row as 'confirmed'.
 
 import type { Config, Context } from '@netlify/functions'
-import { buildConfirmationMessage, isWhapiConfigured, sendWhatsappText } from '../lib/whapi'
+import {
+  buildConfirmationInteractive,
+  buildConfirmationMessage,
+  isWhapiConfigured,
+  sendWhatsappInteractive,
+  sendWhatsappText,
+} from '../lib/whapi'
 import { buildISODate, createEvent, isGcalConfigured } from '../lib/gcal'
 import { getSupabaseAdmin, type AppointmentRow } from '../lib/supabase'
 
@@ -81,22 +87,31 @@ export default async (req: Request, _context: Context) => {
     console.warn('GCal not configured (GCAL_CALENDAR_ID / GCAL_SERVICE_ACCOUNT_KEY) — skipping')
   }
 
-  let whapi: { sent: boolean; id?: string; error?: string } = { sent: false }
+  let whapi: { sent: boolean; id?: string; error?: string; mode?: 'interactive' | 'text' } = {
+    sent: false,
+  }
   if (isWhapiConfigured()) {
+    const cancelUrl = `${SITE_URL}/rendez-vous/annuler/${appt.cancellation_token}`
+    const args = {
+      name: appt.name,
+      motif: appt.motif ?? '',
+      date: appt.date,
+      time: appt.time,
+      type: appt.type,
+      meetLink: gcalMeetLink ?? undefined,
+      cancelUrl,
+    }
     try {
-      const cancelUrl = `${SITE_URL}/rendez-vous/annuler/${appt.cancellation_token}`
-      whapi = await sendWhatsappText(
-        appt.phone,
-        buildConfirmationMessage({
-          name: appt.name,
-          motif: appt.motif ?? '',
-          date: appt.date,
-          time: appt.time,
-          type: appt.type,
-          meetLink: gcalMeetLink ?? undefined,
-          cancelUrl,
-        }),
-      )
+      // Try interactive (URL button) first — falls back to plain text if
+      // WhatsApp/Whapi rejects buttons (their docs flag instability).
+      const r = await sendWhatsappInteractive(appt.phone, buildConfirmationInteractive(args))
+      if (r.sent) {
+        whapi = { ...r, mode: 'interactive' }
+      } else {
+        console.warn('Interactive WhatsApp failed, falling back to text:', r.error)
+        const fallback = await sendWhatsappText(appt.phone, buildConfirmationMessage(args))
+        whapi = { ...fallback, mode: 'text', error: r.error }
+      }
     } catch (err) {
       whapi = { sent: false, error: (err as Error).message }
       console.error('WhatsApp send failed (continuing)', err)
@@ -127,7 +142,7 @@ export default async (req: Request, _context: Context) => {
         ? { sent: false, error: gcalError }
         : { sent: true, eventId: gcalEventId },
       whatsapp: whapi.sent
-        ? { sent: true, messageId: whapi.id }
+        ? { sent: true, messageId: whapi.id, mode: whapi.mode }
         : { sent: false, error: whapi.error },
     }),
   )

@@ -5,8 +5,25 @@
 // Marks the corresponding column to avoid duplicate sends.
 
 import type { Config } from '@netlify/functions'
-import { buildReminderMessage, isWhapiConfigured, sendWhatsappText } from '../lib/whapi'
+import {
+  buildReminderInteractive,
+  buildReminderMessage,
+  isWhapiConfigured,
+  sendWhatsappInteractive,
+  sendWhatsappText,
+} from '../lib/whapi'
 import { getSupabaseAdmin, type AppointmentRow } from '../lib/supabase'
+
+async function sendReminder(
+  phone: string,
+  args: Parameters<typeof buildReminderInteractive>[0],
+) {
+  const r = await sendWhatsappInteractive(phone, buildReminderInteractive(args))
+  if (r.sent) return r
+  // Fallback to plain text if interactive buttons fail (Whapi marks them
+  // as unstable). The text version still includes the cancel URL inline.
+  return sendWhatsappText(phone, buildReminderMessage(args))
+}
 
 const SITE_URL = process.env.SITE_URL ?? 'https://etudeogoulankondawiri.netlify.app'
 
@@ -53,17 +70,14 @@ export default async () => {
       apptStart >= in24hMin &&
       apptStart <= in24hMax
     ) {
-      const r = await sendWhatsappText(
-        raw.phone,
-        buildReminderMessage({
-          name: raw.name,
-          date: raw.date,
-          time: raw.time,
-          type: raw.type,
-          hoursBefore: 24,
-          cancelUrl,
-        }),
-      )
+      const r = await sendReminder(raw.phone, {
+        name: raw.name,
+        date: raw.date,
+        time: raw.time,
+        type: raw.type,
+        hoursBefore: 24,
+        cancelUrl,
+      })
       if (r.sent) {
         await supabase
           .from('appointments')
@@ -78,17 +92,14 @@ export default async () => {
       apptStart >= inAHourMin &&
       apptStart <= inAHourMax
     ) {
-      const r = await sendWhatsappText(
-        raw.phone,
-        buildReminderMessage({
-          name: raw.name,
-          date: raw.date,
-          time: raw.time,
-          type: raw.type,
-          hoursBefore: 2,
-          cancelUrl,
-        }),
-      )
+      const r = await sendReminder(raw.phone, {
+        name: raw.name,
+        date: raw.date,
+        time: raw.time,
+        type: raw.type,
+        hoursBefore: 2,
+        cancelUrl,
+      })
       if (r.sent) {
         await supabase
           .from('appointments')
