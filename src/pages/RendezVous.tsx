@@ -10,10 +10,10 @@ export default function RendezVous() {
         canonical="/rendez-vous"
       />
 
-      <section className="bg-navy py-16">
+      <section className="bg-navy py-12 sm:py-14 lg:py-16">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <span className="text-gold text-sm font-medium tracking-wider uppercase">Rendez-vous</span>
-          <h1 className="mt-3 text-4xl sm:text-5xl font-serif font-bold text-white">
+          <h1 className="mt-3 text-3xl sm:text-4xl lg:text-5xl font-serif font-bold text-white">
             Prendre rendez-vous en ligne
           </h1>
           <p className="mt-6 text-lg text-gray-300 max-w-2xl mx-auto">
@@ -23,7 +23,7 @@ export default function RendezVous() {
         </div>
       </section>
 
-      <section className="py-16 bg-cream">
+      <section className="py-10 sm:py-14 lg:py-16 bg-cream">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <BookingWizard />
         </div>

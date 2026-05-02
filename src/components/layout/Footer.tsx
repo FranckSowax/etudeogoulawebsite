@@ -4,10 +4,10 @@ import { expertises } from '@/lib/services'
 
 export default function Footer() {
   return (
-    <footer className="bg-navy-dark py-12">
+    <footer className="bg-navy-dark pt-12 pb-safe">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid md:grid-cols-4 gap-8 mb-8">
-          <div className="md:col-span-2">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
+          <div className="sm:col-span-2">
             <Link to="/" className="flex items-center gap-3 mb-4">
               <img src="/logo.png" alt="Cabinet Notarial S.O. Nkondawiri" className="h-12 w-auto" />
               <div>

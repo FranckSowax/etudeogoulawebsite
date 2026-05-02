@@ -44,13 +44,34 @@
   html {
     scroll-behavior: smooth;
   }
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
   body {
     @apply bg-background text-foreground antialiased;
     font-family: 'Inter', sans-serif;
+    overflow-x: hidden;
+    -webkit-tap-highlight-color: transparent;
   }
   h1, h2, h3, h4, h5, h6 {
     font-family: 'Cormorant Garamond', 'Playfair Display', serif;
     letter-spacing: -0.01em;
+  }
+  /* Avoid iOS zooming on input focus when font-size < 16px */
+  input, textarea, select {
+    font-size: 16px;
+  }
+  @media (min-width: 640px) {
+    input, textarea, select {
+      font-size: 14px;
+    }
   }
 }
 
@@ -69,5 +90,13 @@
   }
   .border-gold {
     border-color: #c9a227;
+  }
+  /* Fluid hero title: 32px on small phones up to 64px on large screens */
+  .text-fluid-h1 {
+    font-size: clamp(2rem, 4.5vw + 1rem, 4rem);
+    line-height: 1.05;
+  }
+  .pb-safe {
+    padding-bottom: calc(2rem + env(safe-area-inset-bottom));
   }
 }

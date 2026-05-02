@@ -10,10 +10,10 @@ export default function Contact() {
         canonical="/contact"
       />
 
-      <section className="bg-navy py-16">
+      <section className="bg-navy py-12 sm:py-14 lg:py-16">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <span className="text-gold text-sm font-medium tracking-wider uppercase">Contact</span>
-          <h1 className="mt-3 text-4xl sm:text-5xl font-serif font-bold text-white">
+          <h1 className="mt-3 text-3xl sm:text-4xl lg:text-5xl font-serif font-bold text-white">
             Contactez le cabinet
           </h1>
         </div>

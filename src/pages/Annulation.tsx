@@ -41,15 +41,15 @@ export default function Annulation() {
         description="Annulez votre rendez-vous en un clic auprès du Cabinet Notarial Ogoula Nkondawiri."
       />
 
-      <section className="bg-navy py-16">
+      <section className="bg-navy py-12 sm:py-14 lg:py-16">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-3xl sm:text-4xl font-serif font-bold text-white">
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-serif font-bold text-white">
             Annulation du rendez-vous
           </h1>
         </div>
       </section>
 
-      <section className="py-16 bg-white">
+      <section className="py-10 sm:py-14 lg:py-16 bg-white">
         <div className="max-w-xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           {done ? (
             <>
@@ -63,14 +63,12 @@ export default function Annulation() {
                 Le créneau a été libéré. Vous pouvez à tout moment réserver un nouveau rendez-vous.
               </p>
               <div className="flex flex-col sm:flex-row gap-3 justify-center">
-                <Link to="/rendez-vous">
-                  <Button className="bg-gold hover:bg-gold-dark text-navy font-semibold">
-                    Reprendre rendez-vous
-                  </Button>
-                </Link>
-                <Link to="/">
-                  <Button variant="outline">Retour à l'accueil</Button>
-                </Link>
+                <Button asChild className="bg-gold hover:bg-gold-dark text-navy font-semibold">
+                  <Link to="/rendez-vous">Reprendre rendez-vous</Link>
+                </Button>
+                <Button asChild variant="outline">
+                  <Link to="/">Retour à l'accueil</Link>
+                </Button>
               </div>
             </>
           ) : (
@@ -98,11 +96,11 @@ export default function Annulation() {
                     'Oui, annuler'
                   )}
                 </Button>
-                <Link to="/">
-                  <Button variant="outline">
+                <Button asChild variant="outline">
+                  <Link to="/">
                     <ArrowLeft className="w-4 h-4 mr-2" /> Conserver le rendez-vous
-                  </Button>
-                </Link>
+                  </Link>
+                </Button>
               </div>
             </>
           )}

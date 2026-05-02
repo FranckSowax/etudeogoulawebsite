@@ -5,6 +5,7 @@ import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { toast } from 'sonner'
 import { supabase } from '@/lib/supabase'
+import Reveal from '@/components/Reveal'
 
 export default function ContactSection() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -26,10 +27,10 @@ export default function ContactSection() {
   }
 
   return (
-    <section id="contact" className="py-24 bg-navy">
+    <section id="contact" className="py-16 sm:py-20 lg:py-24 bg-navy">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid lg:grid-cols-2 gap-16">
-          <div>
+        <div className="grid lg:grid-cols-2 gap-10 sm:gap-12 lg:gap-16">
+          <Reveal>
             <div className="flex items-center gap-2 mb-4">
               <div className="w-8 h-[2px] bg-gold" />
               <span className="text-gold text-sm font-medium tracking-wider uppercase">
@@ -37,7 +38,7 @@ export default function ContactSection() {
               </span>
             </div>
 
-            <h2 className="text-3xl sm:text-4xl font-serif font-bold text-white mb-6">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-serif font-bold text-white mb-5 sm:mb-6">
               Contactez votre Notaire au Gabon
             </h2>
 
@@ -65,9 +66,9 @@ export default function ContactSection() {
                 contact@notaire-nkondawiri.ga
               </DarkInfoRow>
             </div>
-          </div>
+          </Reveal>
 
-          <div className="bg-white/5 backdrop-blur-sm p-8 rounded-lg border border-white/10">
+          <Reveal delay={0.08} className="bg-white/5 backdrop-blur-sm p-6 sm:p-8 rounded-lg border border-white/10">
             <h3 className="font-serif text-xl text-white mb-6">Envoyez-nous un message</h3>
             <form className="space-y-4" onSubmit={handleSubmit}>
               <div className="grid sm:grid-cols-2 gap-4">
@@ -93,7 +94,7 @@ export default function ContactSection() {
                 Envoyer le Message
               </Button>
             </form>
-          </div>
+          </Reveal>
         </div>
       </div>
     </section>

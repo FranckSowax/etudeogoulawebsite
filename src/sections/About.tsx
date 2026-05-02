@@ -1,13 +1,14 @@
 import { Link } from 'react-router-dom'
 import { CheckCircle2, ChevronRight, Award } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import Reveal from '@/components/Reveal'
 
 export default function About() {
   return (
-    <section id="a-propos" className="py-24 bg-white">
+    <section id="a-propos" className="py-16 sm:py-20 lg:py-24 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid lg:grid-cols-2 gap-16 items-center">
-          <div className="relative">
+        <div className="grid lg:grid-cols-2 gap-10 sm:gap-12 lg:gap-16 items-center">
+          <Reveal className="relative">
             <div className="relative z-10">
               <img
                 src="/notary-portrait.jpg"
@@ -30,9 +31,9 @@ export default function About() {
                 </div>
               </div>
             </div>
-          </div>
+          </Reveal>
 
-          <div>
+          <Reveal delay={0.08}>
             <div className="flex items-center gap-2 mb-4">
               <div className="w-8 h-[2px] bg-gold" />
               <span className="text-gold text-sm font-medium tracking-wider uppercase">
@@ -40,7 +41,7 @@ export default function About() {
               </span>
             </div>
 
-            <h2 className="text-3xl sm:text-4xl font-serif font-bold text-navy mb-6">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-serif font-bold text-navy mb-5 sm:mb-6">
               Votre Notaire de Confiance pour l'Achat Immobilier au Gabon
             </h2>
 
@@ -74,13 +75,13 @@ export default function About() {
               ))}
             </div>
 
-            <Link to="/contact">
-              <Button className="bg-navy hover:bg-navy-light text-white">
+            <Button asChild className="bg-navy hover:bg-navy-light text-white">
+              <Link to="/contact">
                 Nous Contacter
                 <ChevronRight className="w-4 h-4 ml-2" />
-              </Button>
-            </Link>
-          </div>
+              </Link>
+            </Button>
+          </Reveal>
         </div>
       </div>
     </section>

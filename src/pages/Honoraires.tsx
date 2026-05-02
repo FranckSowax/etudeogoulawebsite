@@ -13,10 +13,10 @@ export default function Honoraires() {
         canonical="/honoraires"
       />
 
-      <section className="bg-navy py-20">
+      <section className="bg-navy py-12 sm:py-16 lg:py-20">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <span className="text-gold text-sm font-medium tracking-wider uppercase">Honoraires</span>
-          <h1 className="mt-3 text-4xl sm:text-5xl font-serif font-bold text-white">
+          <h1 className="mt-3 text-3xl sm:text-4xl lg:text-5xl font-serif font-bold text-white">
             Honoraires & tarifs indicatifs
           </h1>
           <p className="mt-6 text-lg text-gray-300">
@@ -25,7 +25,7 @@ export default function Honoraires() {
         </div>
       </section>
 
-      <section className="py-20 bg-white">
+      <section className="py-12 sm:py-16 lg:py-20 bg-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <p className="text-muted-foreground mb-8 leading-relaxed">
             Les frais de notaire au Gabon comprennent généralement trois composantes : les
@@ -70,12 +70,12 @@ export default function Honoraires() {
           </p>
 
           <div className="mt-12 text-center">
-            <Link to="/rendez-vous">
-              <Button className="bg-gold hover:bg-gold-dark text-navy font-semibold">
+            <Button asChild className="bg-gold hover:bg-gold-dark text-navy font-semibold">
+              <Link to="/rendez-vous">
                 <Calendar className="w-4 h-4 mr-2" />
                 Demander un devis personnalisé
-              </Button>
-            </Link>
+              </Link>
+            </Button>
           </div>
         </div>
       </section>

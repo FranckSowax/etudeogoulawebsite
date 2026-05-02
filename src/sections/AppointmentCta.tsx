@@ -1,13 +1,14 @@
 import { Link } from 'react-router-dom'
 import { Calendar, Clock, MapPin, Phone, MessageCircle, Video, Building } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import Reveal from '@/components/Reveal'
 
 export default function AppointmentCta() {
   return (
-    <section id="rendez-vous" className="py-24 bg-white">
+    <section id="rendez-vous" className="py-16 sm:py-20 lg:py-24 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
-          <div>
+        <div className="grid lg:grid-cols-2 gap-10 sm:gap-12 items-center">
+          <Reveal>
             <div className="flex items-center gap-2 mb-4">
               <div className="w-8 h-[2px] bg-gold" />
               <span className="text-gold text-sm font-medium tracking-wider uppercase">
@@ -15,7 +16,7 @@ export default function AppointmentCta() {
               </span>
             </div>
 
-            <h2 className="text-3xl sm:text-4xl font-serif font-bold text-navy mb-6">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-serif font-bold text-navy mb-5 sm:mb-6">
               Réservez votre consultation en 4 étapes
             </h2>
 
@@ -43,16 +44,16 @@ export default function AppointmentCta() {
               </InfoRow>
             </div>
 
-            <Link to="/rendez-vous">
-              <Button size="lg" className="bg-gold hover:bg-gold-dark text-navy font-semibold h-12 px-8">
+            <Button asChild size="lg" className="bg-gold hover:bg-gold-dark text-navy font-semibold h-12 px-8">
+              <Link to="/rendez-vous">
                 <Calendar className="w-5 h-5 mr-2" />
                 Réserver mon rendez-vous
-              </Button>
-            </Link>
-          </div>
+              </Link>
+            </Button>
+          </Reveal>
 
-          <div className="bg-cream rounded-lg p-8 lg:p-10 shadow-elegant">
-            <ol className="space-y-6">
+          <Reveal delay={0.08} className="bg-cream rounded-lg p-6 sm:p-8 lg:p-10 shadow-elegant">
+            <ol className="space-y-5 sm:space-y-6">
               {[
                 ['Choisissez votre motif', "La durée du créneau s'ajuste automatiquement (de 30 à 60 min)."],
                 ['Sélectionnez la modalité', 'Cabinet, visio Google Meet, ou téléphone.'],
@@ -64,13 +65,13 @@ export default function AppointmentCta() {
                     {idx + 1}
                   </div>
                   <div>
-                    <h3 className="font-serif text-lg font-semibold text-navy">{title}</h3>
+                    <h3 className="font-serif text-base sm:text-lg font-semibold text-navy">{title}</h3>
                     <p className="text-sm text-muted-foreground mt-1">{desc}</p>
                   </div>
                 </li>
               ))}
             </ol>
-          </div>
+          </Reveal>
         </div>
       </div>
     </section>

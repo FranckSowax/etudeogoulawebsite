@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { motion, useReducedMotion } from 'framer-motion'
 import { Calendar, Calculator, Info } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -69,6 +70,7 @@ function computeDisbursements() {
 export default function SimulateurFraisNotaire() {
   const [priceStr, setPriceStr] = useState('50000000')
   const [type, setType] = useState<AcquisitionType>('ancien')
+  const reduce = useReducedMotion()
 
   const price = Math.max(0, Number(priceStr.replace(/\s/g, '')) || 0)
 
@@ -178,9 +180,17 @@ export default function SimulateurFraisNotaire() {
             </div>
 
             <div className="mt-6 pt-6 border-t border-border">
-              <div className="flex items-baseline justify-between">
+              <div className="flex items-baseline justify-between gap-4 flex-wrap">
                 <span className="font-serif text-lg font-semibold text-navy">Total estimé</span>
-                <span className="font-serif text-3xl font-bold text-gold">{formatXAF(result.total)}</span>
+                <motion.span
+                  key={result.total}
+                  initial={reduce ? false : { opacity: 0, scale: 0.96 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.2, ease: 'easeOut' }}
+                  className="font-serif text-2xl sm:text-3xl font-bold text-gold"
+                >
+                  {formatXAF(result.total)}
+                </motion.span>
               </div>
               {price > 0 && (
                 <p className="text-xs text-muted-foreground text-right mt-1">
@@ -189,12 +199,12 @@ export default function SimulateurFraisNotaire() {
               )}
             </div>
 
-            <Link to="/rendez-vous" className="block mt-6">
-              <Button className="w-full bg-gold hover:bg-gold-dark text-navy font-semibold">
+            <Button asChild className="w-full bg-gold hover:bg-gold-dark text-navy font-semibold mt-6">
+              <Link to="/rendez-vous">
                 <Calendar className="w-4 h-4 mr-2" />
                 Demander un devis officiel
-              </Button>
-            </Link>
+              </Link>
+            </Button>
           </div>
         </div>
       </div>

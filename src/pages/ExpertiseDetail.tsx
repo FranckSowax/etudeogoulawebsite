@@ -75,7 +75,7 @@ export default function ExpertiseDetail() {
       />
 
       {/* Hero */}
-      <section className="bg-navy py-20">
+      <section className="bg-navy py-12 sm:py-16 lg:py-20">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <nav className="text-sm text-gold-light mb-6" aria-label="Fil d'Ariane">
             <Link to="/" className="hover:text-gold">Accueil</Link>
@@ -101,7 +101,7 @@ export default function ExpertiseDetail() {
       </section>
 
       {/* Intro + figures */}
-      <section className="py-16 bg-white">
+      <section className="py-10 sm:py-14 lg:py-16 bg-white">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-3 gap-10">
             <div className="lg:col-span-2 space-y-4">
@@ -126,7 +126,7 @@ export default function ExpertiseDetail() {
       </section>
 
       {/* Long-form sections */}
-      <section className="py-16 bg-cream">
+      <section className="py-10 sm:py-14 lg:py-16 bg-cream">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 grid lg:grid-cols-3 gap-12">
           <div className="lg:col-span-2 space-y-12">
             {service.sections.map((sec) => (
@@ -189,18 +189,18 @@ export default function ExpertiseDetail() {
               <p className="text-sm text-gray-300 mb-6">
                 Réservez une consultation avec Maître Ogoula Nkondawiri.
               </p>
-              <Link to="/rendez-vous" className="block mb-3">
-                <Button className="w-full bg-gold hover:bg-gold-dark text-navy font-semibold">
+              <Button asChild className="w-full bg-gold hover:bg-gold-dark text-navy font-semibold mb-3">
+                <Link to="/rendez-vous">
                   <Calendar className="w-4 h-4 mr-2" />
                   Prendre rendez-vous
-                </Button>
-              </Link>
-              <a href="tel:+24101177373535" className="block">
-                <Button variant="outline" className="w-full bg-transparent border-white/30 text-white hover:bg-white hover:text-navy">
+                </Link>
+              </Button>
+              <Button asChild variant="outline" className="w-full bg-transparent border-white/30 text-white hover:bg-white hover:text-navy">
+                <a href="tel:+24101177373535">
                   <Phone className="w-4 h-4 mr-2" />
                   011 77 37 35
-                </Button>
-              </a>
+                </a>
+              </Button>
               <div className="mt-6 pt-6 border-t border-white/10 text-xs text-gray-400">
                 Lun – Ven : 7h30 – 15h30<br />
                 Boulevard de la Nation, Libreville
@@ -211,7 +211,7 @@ export default function ExpertiseDetail() {
       </section>
 
       {/* FAQ */}
-      <section className="py-16 bg-white">
+      <section className="py-10 sm:py-14 lg:py-16 bg-white">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-10">
             <span className="text-gold text-sm font-medium tracking-wider uppercase">FAQ</span>
@@ -235,7 +235,7 @@ export default function ExpertiseDetail() {
       </section>
 
       {/* Other expertises */}
-      <section className="py-16 bg-cream">
+      <section className="py-10 sm:py-14 lg:py-16 bg-cream">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-2xl font-serif font-bold text-navy mb-8 text-center">
             Nos autres domaines d'expertise

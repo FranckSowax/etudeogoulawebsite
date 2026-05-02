@@ -12,10 +12,10 @@ export default function Etude() {
         canonical="/etude"
       />
 
-      <section className="bg-navy py-20">
+      <section className="bg-navy py-12 sm:py-16 lg:py-20">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <span className="text-gold text-sm font-medium tracking-wider uppercase">L'Étude</span>
-          <h1 className="mt-3 text-4xl sm:text-5xl font-serif font-bold text-white">
+          <h1 className="mt-3 text-3xl sm:text-4xl lg:text-5xl font-serif font-bold text-white">
             Une étude notariale au cœur de Libreville
           </h1>
           <p className="mt-6 text-lg text-gray-300">
@@ -25,7 +25,7 @@ export default function Etude() {
         </div>
       </section>
 
-      <section className="py-20 bg-white">
+      <section className="py-12 sm:py-16 lg:py-20 bg-white">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 grid lg:grid-cols-2 gap-12 items-center">
           <img
             src="/notary-portrait.jpg"
@@ -50,7 +50,7 @@ export default function Etude() {
         </div>
       </section>
 
-      <section className="py-20 bg-cream">
+      <section className="py-12 sm:py-16 lg:py-20 bg-cream">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-3xl font-serif font-bold text-navy text-center mb-12">Nos valeurs</h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -72,18 +72,16 @@ export default function Etude() {
         </div>
       </section>
 
-      <section className="py-20 bg-white">
+      <section className="py-12 sm:py-16 lg:py-20 bg-white">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl font-serif font-bold text-navy mb-4">Déontologie</h2>
           <p className="text-muted-foreground leading-relaxed">
             Officier public, le notaire est tenu au secret professionnel le plus strict, à l'impartialité
             et au devoir de conseil. Nos honoraires sont conformes au tarif réglementé applicable au Gabon.
           </p>
-          <Link to="/honoraires" className="inline-block mt-8">
-            <Button className="bg-gold hover:bg-gold-dark text-navy font-semibold">
-              Consulter nos honoraires
-            </Button>
-          </Link>
+          <Button asChild className="bg-gold hover:bg-gold-dark text-navy font-semibold mt-8">
+            <Link to="/honoraires">Consulter nos honoraires</Link>
+          </Button>
         </div>
       </section>
     </>

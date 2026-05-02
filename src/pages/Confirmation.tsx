@@ -50,12 +50,12 @@ export default function Confirmation() {
         description="Récapitulatif de votre rendez-vous au Cabinet Notarial Ogoula Nkondawiri à Libreville."
       />
 
-      <section className="bg-navy py-16">
+      <section className="bg-navy py-12 sm:py-14 lg:py-16">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <div className="inline-flex w-16 h-16 rounded-full bg-gold/20 items-center justify-center mb-4">
             <CheckCircle2 className="w-8 h-8 text-gold" />
           </div>
-          <h1 className="text-3xl sm:text-4xl font-serif font-bold text-white">
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-serif font-bold text-white">
             Rendez-vous enregistré
           </h1>
           <p className="mt-4 text-gray-300">
@@ -64,18 +64,16 @@ export default function Confirmation() {
         </div>
       </section>
 
-      <section className="py-16 bg-white">
+      <section className="py-10 sm:py-14 lg:py-16 bg-white">
         <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
           {loading && <p className="text-center text-muted-foreground">Chargement…</p>}
 
           {error && (
             <div className="text-center">
               <p className="text-muted-foreground mb-6">{error}</p>
-              <Link to="/rendez-vous">
-                <Button className="bg-gold hover:bg-gold-dark text-navy font-semibold">
-                  Reprendre une réservation
-                </Button>
-              </Link>
+              <Button asChild className="bg-gold hover:bg-gold-dark text-navy font-semibold">
+                <Link to="/rendez-vous">Reprendre une réservation</Link>
+              </Button>
             </div>
           )}
 
@@ -126,16 +124,14 @@ export default function Confirmation() {
 
               {appt.status !== 'cancelled' && (
                 <div className="flex flex-col sm:flex-row gap-3">
-                  <Link to={`/rendez-vous/annuler/${token}`} className="flex-1">
-                    <Button variant="outline" className="w-full border-destructive text-destructive hover:bg-destructive hover:text-white">
+                  <Button asChild variant="outline" className="flex-1 border-destructive text-destructive hover:bg-destructive hover:text-white">
+                    <Link to={`/rendez-vous/annuler/${token}`}>
                       <X className="w-4 h-4 mr-2" /> Annuler ce rendez-vous
-                    </Button>
-                  </Link>
-                  <Link to="/" className="flex-1">
-                    <Button className="w-full bg-navy hover:bg-navy-light text-white">
-                      Retour à l'accueil
-                    </Button>
-                  </Link>
+                    </Link>
+                  </Button>
+                  <Button asChild className="flex-1 bg-navy hover:bg-navy-light text-white">
+                    <Link to="/">Retour à l'accueil</Link>
+                  </Button>
                 </div>
               )}
             </>

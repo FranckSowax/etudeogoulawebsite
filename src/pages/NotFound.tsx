@@ -13,9 +13,9 @@ export default function NotFound() {
           <p className="mt-4 text-muted-foreground">
             La page que vous cherchez n'existe pas ou a été déplacée.
           </p>
-          <Link to="/" className="inline-block mt-8">
-            <Button className="bg-navy hover:bg-navy-light text-white">Retour à l'accueil</Button>
-          </Link>
+          <Button asChild className="bg-navy hover:bg-navy-light text-white mt-8">
+            <Link to="/">Retour à l'accueil</Link>
+          </Button>
         </div>
       </section>
     </>

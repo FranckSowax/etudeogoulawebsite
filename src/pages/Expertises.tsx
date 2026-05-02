@@ -13,10 +13,10 @@ export default function Expertises() {
         canonical="/expertises"
       />
 
-      <section className="bg-navy py-20">
+      <section className="bg-navy py-12 sm:py-16 lg:py-20">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <span className="text-gold text-sm font-medium tracking-wider uppercase">Expertises</span>
-          <h1 className="mt-3 text-4xl sm:text-5xl font-serif font-bold text-white">
+          <h1 className="mt-3 text-3xl sm:text-4xl lg:text-5xl font-serif font-bold text-white">
             Nos domaines d'expertise notariale
           </h1>
           <p className="mt-6 text-lg text-gray-300">
@@ -25,7 +25,7 @@ export default function Expertises() {
         </div>
       </section>
 
-      <section className="py-20 bg-cream">
+      <section className="py-12 sm:py-16 lg:py-20 bg-cream">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {expertises.map((service) => (

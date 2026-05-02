@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import {
   ArrowLeft,
   ArrowRight,
@@ -112,68 +113,82 @@ export default function BookingWizard() {
     navigate(`/rendez-vous/confirmation/${token}`)
   }
 
+  const reduce = useReducedMotion()
+  const stepAnim = reduce
+    ? {}
+    : {
+        initial: { opacity: 0, x: 20 },
+        animate: { opacity: 1, x: 0 },
+        exit: { opacity: 0, x: -20 },
+        transition: { duration: 0.22, ease: 'easeOut' as const },
+      }
+
   return (
     <div className="max-w-4xl mx-auto">
       <Stepper currentIndex={stepIndex} />
 
-      <div className="mt-8 bg-white rounded-lg shadow-elegant border border-border overflow-hidden">
-        {step === 'motif' && (
-          <MotifStep
-            selected={motifSlug}
-            onSelect={(slug) => {
-              setMotifSlug(slug)
-              goNext('type')
-            }}
-          />
-        )}
+      <div className="mt-6 sm:mt-8 bg-white rounded-lg shadow-elegant border border-border overflow-hidden">
+        <AnimatePresence mode="wait">
+          <motion.div key={step} {...stepAnim}>
+            {step === 'motif' && (
+              <MotifStep
+                selected={motifSlug}
+                onSelect={(slug) => {
+                  setMotifSlug(slug)
+                  goNext('type')
+                }}
+              />
+            )}
 
-        {step === 'type' && (
-          <TypeStep
-            selected={type}
-            onSelect={(t) => {
-              setType(t)
-              goNext('datetime')
-            }}
-          />
-        )}
+            {step === 'type' && (
+              <TypeStep
+                selected={type}
+                onSelect={(t) => {
+                  setType(t)
+                  goNext('datetime')
+                }}
+              />
+            )}
 
-        {step === 'datetime' && motif && (
-          <DateTimeStep
-            durationMinutes={motif.durationMinutes}
-            selectedDate={date}
-            selectedTime={time}
-            onSelectDate={(d) => {
-              setDate(d)
-              setTime(null)
-            }}
-            onSelectTime={(t) => {
-              setTime(t)
-              goNext('details')
-            }}
-          />
-        )}
+            {step === 'datetime' && motif && (
+              <DateTimeStep
+                durationMinutes={motif.durationMinutes}
+                selectedDate={date}
+                selectedTime={time}
+                onSelectDate={(d) => {
+                  setDate(d)
+                  setTime(null)
+                }}
+                onSelectTime={(t) => {
+                  setTime(t)
+                  goNext('details')
+                }}
+              />
+            )}
 
-        {step === 'details' && motif && typeOption && date && time && (
-          <DetailsStep
-            motif={motif.label}
-            duration={motif.durationMinutes}
-            typeLabel={typeOption.label}
-            date={date}
-            time={time}
-            name={name}
-            phone={phone}
-            email={email}
-            message={message}
-            submitting={submitting}
-            onChange={(field, value) => {
-              if (field === 'name') setName(value)
-              if (field === 'phone') setPhone(value)
-              if (field === 'email') setEmail(value)
-              if (field === 'message') setMessage(value)
-            }}
-            onSubmit={handleSubmit}
-          />
-        )}
+            {step === 'details' && motif && typeOption && date && time && (
+              <DetailsStep
+                motif={motif.label}
+                duration={motif.durationMinutes}
+                typeLabel={typeOption.label}
+                date={date}
+                time={time}
+                name={name}
+                phone={phone}
+                email={email}
+                message={message}
+                submitting={submitting}
+                onChange={(field, value) => {
+                  if (field === 'name') setName(value)
+                  if (field === 'phone') setPhone(value)
+                  if (field === 'email') setEmail(value)
+                  if (field === 'message') setMessage(value)
+                }}
+                onSubmit={handleSubmit}
+              />
+            )}
+          </motion.div>
+        </AnimatePresence>
 
         {canGoBack && step !== 'details' && (
           <div className="px-6 pb-6">
@@ -194,17 +209,22 @@ export default function BookingWizard() {
 // ------------------------------ Stepper ---------------------------------------
 
 function Stepper({ currentIndex }: { currentIndex: number }) {
-  const labels = ['Motif', 'Modalité', 'Date & heure', 'Coordonnées']
+  const steps = [
+    { short: 'Motif', long: 'Motif' },
+    { short: 'Mode', long: 'Modalité' },
+    { short: 'Date', long: 'Date & heure' },
+    { short: 'Infos', long: 'Coordonnées' },
+  ]
   return (
-    <ol className="flex items-center justify-between gap-2 sm:gap-4">
-      {labels.map((label, i) => {
+    <ol className="flex items-center justify-between gap-1 sm:gap-4">
+      {steps.map((s, i) => {
         const done = i < currentIndex
         const active = i === currentIndex
         return (
-          <li key={label} className="flex-1 flex items-center gap-2 sm:gap-3 min-w-0">
+          <li key={s.long} className="flex-1 flex items-center gap-1.5 sm:gap-3 min-w-0">
             <div
               className={cn(
-                'flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold border-2 transition-colors',
+                'flex-shrink-0 w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center text-xs sm:text-sm font-bold border-2 transition-colors',
                 done && 'bg-gold border-gold text-navy',
                 active && 'bg-navy border-navy text-white',
                 !done && !active && 'bg-white border-border text-muted-foreground',
@@ -215,14 +235,15 @@ function Stepper({ currentIndex }: { currentIndex: number }) {
             </div>
             <span
               className={cn(
-                'text-xs sm:text-sm font-medium truncate hidden sm:inline',
+                'text-[11px] sm:text-sm font-medium truncate',
                 active ? 'text-navy' : done ? 'text-navy/70' : 'text-muted-foreground',
               )}
             >
-              {label}
+              <span className="sm:hidden">{s.short}</span>
+              <span className="hidden sm:inline">{s.long}</span>
             </span>
-            {i < labels.length - 1 && (
-              <div className={cn('flex-1 h-[2px] rounded', done ? 'bg-gold' : 'bg-border')} />
+            {i < steps.length - 1 && (
+              <div className={cn('flex-1 h-[2px] rounded min-w-[8px]', done ? 'bg-gold' : 'bg-border')} />
             )}
           </li>
         )
