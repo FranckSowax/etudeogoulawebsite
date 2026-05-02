@@ -97,12 +97,29 @@ export const typeBySlug = (slug: AppointmentType) =>
 
 // ---------- Slot generation ---------------------------------------------------
 
-const OFFICE_OPEN_MINUTES = 7 * 60 + 30   // 07:30
-const OFFICE_CLOSE_MINUTES = 15 * 60 + 30 // 15:30
 const SLOT_STEP_MINUTES = 30
 
 export type Slot = { time: string; minutes: number }
 export type BusySlot = { date: string; time: string; duration_minutes: number }
+
+/** One row from the office_hours table, parsed into minute offsets. */
+export type DaySchedule = {
+  dayOfWeek: number   // 1=Mon … 7=Sun (ISO weekday)
+  isOpen: boolean
+  openMinutes: number  // e.g. 450 for 07:30
+  closeMinutes: number // e.g. 930 for 15:30
+}
+
+/** Mon–Fri 07:30–15:30, used as fallback while office_hours loads. */
+export const DEFAULT_SCHEDULE: DaySchedule[] = [
+  { dayOfWeek: 1, isOpen: true,  openMinutes: 450, closeMinutes: 930 },
+  { dayOfWeek: 2, isOpen: true,  openMinutes: 450, closeMinutes: 930 },
+  { dayOfWeek: 3, isOpen: true,  openMinutes: 450, closeMinutes: 930 },
+  { dayOfWeek: 4, isOpen: true,  openMinutes: 450, closeMinutes: 930 },
+  { dayOfWeek: 5, isOpen: true,  openMinutes: 450, closeMinutes: 930 },
+  { dayOfWeek: 6, isOpen: false, openMinutes: 450, closeMinutes: 930 },
+  { dayOfWeek: 7, isOpen: false, openMinutes: 450, closeMinutes: 930 },
+]
 
 const minutesToTime = (m: number) =>
   `${String(Math.floor(m / 60)).padStart(2, '0')}:${String(m % 60).padStart(2, '0')}`
@@ -112,16 +129,23 @@ const timeToMinutes = (t: string) => {
   return h * 60 + m
 }
 
-/**
- * Returns all candidate start times for a given date and motif duration.
- * Filters out slots that would overlap an existing busy slot or that
- * would exceed office hours.
- */
+/** JS getDay() → ISO weekday (1=Mon…7=Sun) */
+const jsToIso = (d: number) => (d === 0 ? 7 : d)
+
+function dayScheduleFor(isoDate: string, schedule: DaySchedule[]): DaySchedule | undefined {
+  const dow = jsToIso(new Date(isoDate + 'T00:00:00').getDay())
+  return schedule.find((s) => s.dayOfWeek === dow)
+}
+
 export function computeAvailableSlots(
   busy: BusySlot[],
   isoDate: string,
   durationMinutes: number,
+  schedule: DaySchedule[] = DEFAULT_SCHEDULE,
 ): Slot[] {
+  const ds = dayScheduleFor(isoDate, schedule)
+  if (!ds?.isOpen) return []
+
   const dayBusy = busy
     .filter((b) => b.date === isoDate)
     .map((b) => {
@@ -131,58 +155,71 @@ export function computeAvailableSlots(
 
   const slots: Slot[] = []
   for (
-    let t = OFFICE_OPEN_MINUTES;
-    t + durationMinutes <= OFFICE_CLOSE_MINUTES;
+    let t = ds.openMinutes;
+    t + durationMinutes <= ds.closeMinutes;
     t += SLOT_STEP_MINUTES
   ) {
     const end = t + durationMinutes
-    const overlaps = dayBusy.some((b) => t < b.end && end > b.start)
-    if (!overlaps) {
+    if (!dayBusy.some((b) => t < b.end && end > b.start)) {
       slots.push({ time: minutesToTime(t), minutes: t })
     }
   }
   return slots
 }
 
-/**
- * For a list of next N working days, returns which days have at least one
- * available slot (so the calendar can grey out unavailable ones).
- */
 export function computeOpenDays(
   busy: BusySlot[],
   days: string[],
   durationMinutes: number,
+  schedule: DaySchedule[] = DEFAULT_SCHEDULE,
 ): Record<string, boolean> {
   const out: Record<string, boolean> = {}
   for (const d of days) {
-    out[d] = computeAvailableSlots(busy, d, durationMinutes).length > 0
+    out[d] = computeAvailableSlots(busy, d, durationMinutes, schedule).length > 0
   }
   return out
 }
 
-// Returns the next `count` working days (Mon-Fri), starting today, as ISO yyyy-mm-dd
-export function nextWorkingDays(count: number, from: Date = new Date()): string[] {
+/** Returns the next `count` open working days as ISO yyyy-mm-dd strings. */
+export function nextWorkingDays(
+  count: number,
+  from: Date = new Date(),
+  schedule: DaySchedule[] = DEFAULT_SCHEDULE,
+): string[] {
   const out: string[] = []
   const cursor = new Date(from)
   cursor.setHours(0, 0, 0, 0)
 
-  // Skip today if it's already past office hours
+  // Skip today if past the last viable slot
   const now = new Date()
-  if (
-    cursor.toDateString() === now.toDateString() &&
-    now.getHours() * 60 + now.getMinutes() >= OFFICE_CLOSE_MINUTES - 30
-  ) {
-    cursor.setDate(cursor.getDate() + 1)
+  if (cursor.toDateString() === now.toDateString()) {
+    const todayDs = dayScheduleFor(cursor.toISOString().slice(0, 10), schedule)
+    if (todayDs && now.getHours() * 60 + now.getMinutes() >= todayDs.closeMinutes - 30) {
+      cursor.setDate(cursor.getDate() + 1)
+    }
   }
 
-  while (out.length < count) {
-    const dow = cursor.getDay()
-    if (dow !== 0 && dow !== 6) {
-      out.push(cursor.toISOString().slice(0, 10))
-    }
+  let guard = 0
+  while (out.length < count && guard < count + 90) {
+    guard++
+    const ds = dayScheduleFor(cursor.toISOString().slice(0, 10), schedule)
+    if (ds?.isOpen) out.push(cursor.toISOString().slice(0, 10))
     cursor.setDate(cursor.getDate() + 1)
   }
   return out
+}
+
+/** Human-readable opening hours label for a schedule, e.g. "lun.–ven. 07h30–15h30". */
+export function scheduleLabel(schedule: DaySchedule[]): string {
+  const open = schedule.filter((s) => s.isOpen)
+  if (open.length === 0) return 'Fermé'
+  const min = Math.min(...open.map((s) => s.openMinutes))
+  const max = Math.max(...open.map((s) => s.closeMinutes))
+  const fmt = (m: number) => `${String(Math.floor(m / 60)).padStart(2, '0')}h${String(m % 60).padStart(2, '0')}`
+  const days = open.map((s) =>
+    ['', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'][s.dayOfWeek],
+  )
+  return `${days[0]}–${days[days.length - 1]} ${fmt(min)}–${fmt(max)}`
 }
 
 export function formatLongDate(iso: string): string {

@@ -28,10 +28,12 @@ import {
   motifBySlug,
   motifs,
   nextWorkingDays,
+  scheduleLabel,
   typeBySlug,
   type AppointmentType,
 } from '@/lib/booking'
 import { useAvailability } from '@/hooks/useAvailability'
+import { useOfficeHours } from '@/hooks/useOfficeHours'
 import { supabase } from '@/lib/supabase'
 import { cn } from '@/lib/utils'
 
@@ -360,26 +362,29 @@ function DateTimeStep({
   onSelectDate: (d: string) => void
   onSelectTime: (t: string) => void
 }) {
-  const days = useMemo(() => nextWorkingDays(15), [])
-  const start = days[0]
-  const end = days[days.length - 1]
-  const { busy, loading } = useAvailability(start, end)
+  const { schedule, loading: scheduleLoading } = useOfficeHours()
+  const days = useMemo(() => nextWorkingDays(15, new Date(), schedule), [schedule])
+  const start = days[0] ?? new Date().toISOString().slice(0, 10)
+  const end = days[days.length - 1] ?? start
+  const { busy, loading: slotsLoading } = useAvailability(start, end)
+  const loading = scheduleLoading || slotsLoading
 
   const openDays = useMemo(
-    () => computeOpenDays(busy, days, durationMinutes),
-    [busy, days, durationMinutes],
+    () => computeOpenDays(busy, days, durationMinutes, schedule),
+    [busy, days, durationMinutes, schedule],
   )
 
   const slotsForDate = useMemo(() => {
     if (!selectedDate) return []
-    return computeAvailableSlots(busy, selectedDate, durationMinutes)
-  }, [busy, selectedDate, durationMinutes])
+    return computeAvailableSlots(busy, selectedDate, durationMinutes, schedule)
+  }, [busy, selectedDate, durationMinutes, schedule])
 
   return (
     <div className="p-6 sm:p-8">
       <h2 className="font-serif text-2xl font-bold text-navy mb-2">Choisissez votre créneau</h2>
       <p className="text-muted-foreground text-sm mb-6">
-        Créneau de {durationMinutes} minutes. Le cabinet est ouvert du lundi au vendredi de 7h30 à 15h30.
+        Créneau de {durationMinutes} minutes.{' '}
+        {!scheduleLoading && <>Le cabinet est ouvert : {scheduleLabel(schedule)}.</>}
       </p>
 
       <div className="space-y-6">
