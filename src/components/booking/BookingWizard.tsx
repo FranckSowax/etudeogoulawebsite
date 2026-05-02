@@ -70,27 +70,32 @@ export default function BookingWizard() {
   const handleSubmit = async () => {
     if (!motif || !type || !date || !time) return
     setSubmitting(true)
-    const { data, error } = await supabase
-      .from('appointments')
-      .insert({
-        name: name.trim(),
-        phone: phone.trim(),
-        email: email.trim() || null,
-        message: message.trim() || null,
-        motif: motif.label,
-        service: motif.slug,
-        type,
-        date,
-        time,
-        duration_minutes: motif.durationMinutes,
-        status: 'pending',
-      })
-      .select('cancellation_token')
-      .single()
+
+    // Generate the cancellation token client-side. Avoids the .select()
+    // round-trip after insert, which would require a SELECT RLS policy
+    // (RETURNING is treated as SELECT by Postgres). With anon's
+    // INSERT-only policy in place, generating the UUID locally lets us
+    // navigate straight to the confirmation page using the same token.
+    const token = crypto.randomUUID()
+
+    const { error } = await supabase.from('appointments').insert({
+      name: name.trim(),
+      phone: phone.trim(),
+      email: email.trim() || null,
+      message: message.trim() || null,
+      motif: motif.label,
+      service: motif.slug,
+      type,
+      date,
+      time,
+      duration_minutes: motif.durationMinutes,
+      status: 'pending',
+      cancellation_token: token,
+    })
 
     setSubmitting(false)
 
-    if (error || !data) {
+    if (error) {
       toast.error("Une erreur est survenue. Veuillez réessayer.")
       return
     }
@@ -101,10 +106,10 @@ export default function BookingWizard() {
     fetch('/api/appointments/created', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ token: data.cancellation_token }),
+      body: JSON.stringify({ token }),
     }).catch((err) => console.error('appointment-created webhook failed', err))
 
-    navigate(`/rendez-vous/confirmation/${data.cancellation_token}`)
+    navigate(`/rendez-vous/confirmation/${token}`)
   }
 
   return (
