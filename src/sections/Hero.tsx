@@ -1,7 +1,8 @@
 import { Link } from 'react-router-dom'
 import { motion, useReducedMotion } from 'framer-motion'
-import { Calendar, ChevronRight, Shield, Award, Gavel } from 'lucide-react'
+import { Calendar, MapPin, Phone } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import Eyebrow from '@/components/ui/Eyebrow'
 
 export default function Hero() {
   const reduce = useReducedMotion()
@@ -9,94 +10,96 @@ export default function Hero() {
     reduce
       ? {}
       : {
-          initial: { opacity: 0, y: 14 },
+          initial: { opacity: 0, y: 18 },
           animate: { opacity: 1, y: 0 },
-          transition: { duration: 0.5, delay, ease: 'easeOut' as const },
+          transition: { duration: 0.7, delay, ease: 'easeOut' as const },
         }
 
   return (
     <section
       id="accueil"
-      className="relative min-h-[85svh] md:min-h-screen flex items-center"
+      className="relative min-h-[90svh] md:min-h-screen flex items-center bg-ink text-paper overflow-hidden"
     >
+      {/* Background image with desaturation + ink overlay */}
       <div className="absolute inset-0">
         <img
           src="/hero-notary.jpg"
-          alt="Étude notariale pour achat immobilier au Gabon - Notaire Ogoula Nkondawiri à Libreville"
-          className="w-full h-full object-cover"
+          alt="Étude notariale Ogoula Nkondawiri à Libreville, Gabon"
+          className="w-full h-full object-cover opacity-40 grayscale-[40%]"
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-navy/95 via-navy/85 to-navy/50" />
+        <div className="absolute inset-0 bg-gradient-to-r from-ink via-ink/85 to-ink/40" />
+        <div className="absolute inset-0 bg-gradient-to-t from-ink/80 via-transparent to-ink/40" />
       </div>
 
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 sm:py-28 lg:py-32 w-full">
-        <div className="max-w-2xl">
-          <motion.div className="flex items-center gap-2 mb-5 sm:mb-6" {...fade(0)}>
-            <div className="w-10 sm:w-12 h-[2px] bg-gold" />
-            <span className="text-gold-light text-xs sm:text-sm font-medium tracking-wider uppercase">
-              République Gabonaise
-            </span>
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 sm:py-28 lg:py-36 w-full">
+        <div className="max-w-3xl">
+          <motion.div {...fade(0)}>
+            <Eyebrow tone="paper" className="mb-8">
+              Étude Notariale — Libreville, République Gabonaise
+            </Eyebrow>
           </motion.div>
 
           <motion.h1
-            className="text-fluid-h1 font-serif font-bold text-white mb-5 sm:mb-6"
-            {...fade(0.08)}
+            {...fade(0.1)}
+            className="font-serif font-medium text-paper [font-size:clamp(2.5rem,5.5vw,4.5rem)] leading-[1.05] tracking-[-0.015em] mb-7"
           >
-            Notaire au Gabon<br />
-            <span className="text-gold">Suzanne Ogoula</span><br />
-            Nkondawiri
+            Notaire à Libreville. Conseil patrimonial,{' '}
+            <span className="text-bronze">droit immobilier</span> et{' '}
+            <span className="text-bronze">droit OHADA</span>.
           </motion.h1>
 
           <motion.p
-            className="text-base sm:text-lg lg:text-xl text-gray-200 mb-7 sm:mb-8 leading-relaxed max-w-xl"
-            {...fade(0.16)}
+            {...fade(0.2)}
+            className="text-paper/75 [font-size:clamp(1rem,1.4vw,1.125rem)] leading-relaxed max-w-2xl mb-10"
           >
-            Votre notaire pour l'achat immobilier au Gabon. Sécurité juridique,
-            conseil personnalisé et accompagnement dans toutes vos démarches
-            notariales à Libreville.
+            L&rsquo;Étude Ogoula Nkondawiri accompagne particuliers, entreprises et institutions au
+            Gabon depuis 2012. Sécurité juridique, discrétion et excellence pour vos opérations
+            les plus structurantes.
           </motion.p>
 
-          <motion.div className="flex flex-col sm:flex-row gap-3 sm:gap-4" {...fade(0.24)}>
+          <motion.div {...fade(0.3)} className="flex flex-col sm:flex-row gap-3 sm:gap-4">
             <Button
               asChild
               size="lg"
-              className="bg-gold hover:bg-gold-dark text-navy font-semibold px-6 sm:px-8 h-12"
+              className="bg-bronze hover:bg-bronze/90 text-paper font-medium tracking-wider uppercase text-xs px-7 h-12 rounded-none"
             >
               <Link to="/rendez-vous">
-                <Calendar className="w-5 h-5 mr-2" />
-                Prendre Rendez-vous
+                <Calendar className="w-4 h-4 mr-2" />
+                Prendre rendez-vous
               </Link>
             </Button>
             <Button
               asChild
+              variant="outline"
               size="lg"
-              className="bg-white text-navy hover:bg-gray-100 px-6 sm:px-8 font-semibold h-12"
+              className="border border-paper/40 bg-transparent text-paper hover:bg-paper hover:text-ink font-medium tracking-wider uppercase text-xs px-7 h-12 rounded-none"
             >
-              <Link to="/expertises">
-                <ChevronRight className="w-5 h-5 mr-2" />
-                Nos Domaines d'Expertise
-              </Link>
+              <Link to="/etude">Découvrir l&rsquo;Étude</Link>
             </Button>
           </motion.div>
 
           <motion.div
-            className="mt-10 sm:mt-12 flex flex-wrap items-center gap-4 sm:gap-6 text-white/80"
-            {...fade(0.32)}
+            {...fade(0.4)}
+            className="mt-14 sm:mt-16 flex flex-wrap items-center gap-x-8 gap-y-4 text-paper/55"
           >
-            <div className="flex items-center gap-2">
-              <Shield className="w-5 h-5 text-gold" />
-              <span className="text-xs sm:text-sm">Sécurité Juridique</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <Award className="w-5 h-5 text-gold" />
-              <span className="text-xs sm:text-sm">Expertise Reconnue</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <Gavel className="w-5 h-5 text-gold" />
-              <span className="text-xs sm:text-sm">Authenticité Garantie</span>
-            </div>
+            <Item icon={<MapPin className="w-3.5 h-3.5" />}>Bd de la Nation, Imm. Hollando</Item>
+            <Item icon={<Phone className="w-3.5 h-3.5" />}>011 77 37 35</Item>
+            <Item>OHADA · Depuis 2012</Item>
           </motion.div>
         </div>
       </div>
+
+      {/* Decorative bottom rule */}
+      <div className="absolute bottom-0 left-0 right-0 h-px bg-bronze/30" />
     </section>
+  )
+}
+
+function Item({ icon, children }: { icon?: React.ReactNode; children: React.ReactNode }) {
+  return (
+    <span className="inline-flex items-center gap-2 text-[11px] tracking-[0.2em] uppercase font-medium">
+      {icon && <span className="text-bronze">{icon}</span>}
+      {children}
+    </span>
   )
 }

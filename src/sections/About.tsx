@@ -1,87 +1,62 @@
-import { Link } from 'react-router-dom'
-import { CheckCircle2, ChevronRight, Award } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import Reveal from '@/components/Reveal'
+import { motion, useReducedMotion } from 'framer-motion'
+import Eyebrow from '@/components/ui/Eyebrow'
+import SectionTitle from '@/components/ui/SectionTitle'
 
 export default function About() {
+  const reduce = useReducedMotion()
+  const fade = (delay = 0) =>
+    reduce
+      ? {}
+      : {
+          initial: { opacity: 0, y: 16 },
+          whileInView: { opacity: 1, y: 0 },
+          viewport: { once: true, margin: '-80px' },
+          transition: { duration: 0.55, delay, ease: 'easeOut' as const },
+        }
+
   return (
-    <section id="a-propos" className="py-16 sm:py-20 lg:py-24 bg-white">
+    <section id="a-propos" aria-label="L'Étude" className="bg-paper py-20 sm:py-28">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid lg:grid-cols-2 gap-10 sm:gap-12 lg:gap-16 items-center">
-          <Reveal className="relative">
-            <div className="relative z-10">
+        <div className="grid lg:grid-cols-12 gap-10 lg:gap-16 items-start">
+          <motion.div className="lg:col-span-5" {...fade(0)}>
+            <div className="relative">
               <img
                 src="/notary-portrait.jpg"
-                alt="Maître Suzanne Ogoula Nkondawiri - Notaire à Libreville, Gabon"
-                className="w-full max-w-md mx-auto rounded-lg shadow-elegant"
+                alt="Étude Notariale Suzanne Ogoula Nkondawiri à Libreville"
+                className="w-full aspect-[4/5] object-cover rounded-sm shadow-elegant"
                 loading="lazy"
               />
+              <div className="absolute -bottom-5 -right-5 w-40 h-40 border border-bronze/40 -z-10" />
+              <div className="absolute -top-5 -left-5 w-24 h-24 bg-bronze/10 -z-10" />
             </div>
-            <div className="absolute -bottom-6 -right-6 w-48 h-48 bg-gold/10 rounded-lg -z-0" />
-            <div className="absolute -top-6 -left-6 w-32 h-32 border-2 border-gold/30 rounded-lg -z-0" />
+          </motion.div>
 
-            <div className="absolute bottom-8 -right-4 bg-white p-4 rounded-lg shadow-elegant">
-              <div className="flex items-center gap-3">
-                <div className="w-12 h-12 gradient-navy rounded-full flex items-center justify-center">
-                  <Award className="w-6 h-6 text-gold" />
-                </div>
-                <div>
-                  <p className="font-serif font-bold text-navy">Notaire</p>
-                  <p className="text-sm text-muted-foreground">Depuis 2012</p>
-                </div>
-              </div>
+          <motion.div className="lg:col-span-7" {...fade(0.1)}>
+            <Eyebrow className="mb-5">L&rsquo;Office</Eyebrow>
+            <SectionTitle className="mb-8">
+              Une référence notariale au cœur de Libreville.
+            </SectionTitle>
+
+            <div className="text-graphite leading-relaxed space-y-5">
+              <p>
+                Établie sur le Boulevard de la Nation, dans l&rsquo;Immeuble Hollando, l&rsquo;Étude
+                Ogoula Nkondawiri figure parmi les études notariales de référence en République
+                Gabonaise. Depuis 2012, elle se distingue par sa capacité à intervenir avec célérité
+                sur les dossiers les plus sensibles, dans le strict respect de la déontologie notariale
+                et de la culture juridique de chacun de ses clients.
+              </p>
+              <p>
+                Particuliers, dirigeants, entreprises, investisseurs institutionnels et acteurs
+                publics actifs sur l&rsquo;espace OHADA y trouvent un interlocuteur unique, capable
+                d&rsquo;allier la précision du droit gabonais à la pratique des montages internationaux.
+              </p>
+              <p>
+                L&rsquo;Étude conjugue une connaissance approfondie du tissu économique local et une
+                ouverture résolue sur les places africaines et européennes — au service d&rsquo;un
+                seul objectif : conférer à chaque acte la sécurité juridique qu&rsquo;il mérite.
+              </p>
             </div>
-          </Reveal>
-
-          <Reveal delay={0.08}>
-            <div className="flex items-center gap-2 mb-4">
-              <div className="w-8 h-[2px] bg-gold" />
-              <span className="text-gold text-sm font-medium tracking-wider uppercase">
-                À Propos de Nous
-              </span>
-            </div>
-
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-serif font-bold text-navy mb-5 sm:mb-6">
-              Votre Notaire de Confiance pour l'Achat Immobilier au Gabon
-            </h2>
-
-            <p className="text-muted-foreground mb-6 leading-relaxed">
-              L'Étude Notariale Suzanne Ogoula Nkondawiri est une étude de notariat
-              établie à Libreville, capitale de la République Gabonaise. Spécialisé dans
-              l'achat et la vente immobilière au Gabon, notre étude accompagne
-              particuliers et entreprises dans toutes leurs transactions notariales.
-            </p>
-
-            <p className="text-muted-foreground mb-8 leading-relaxed">
-              Que vous souhaitiez acheter un bien immobilier au Gabon, constituer une
-              société, régler une succession ou préparer un contrat de mariage, notre
-              notaire vous garantit la sécurité juridique de chaque acte.
-            </p>
-
-            <div className="grid sm:grid-cols-2 gap-4 mb-8">
-              {[
-                ['Professionnalisme', 'Rigueur et excellence'],
-                ['Confidentialité', 'Discrétion absolue'],
-                ['Réactivité', 'Réponse rapide'],
-                ['Accessibilité', 'À votre écoute'],
-              ].map(([title, sub]) => (
-                <div key={title} className="flex items-start gap-3">
-                  <CheckCircle2 className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
-                  <div>
-                    <p className="font-medium text-navy">{title}</p>
-                    <p className="text-sm text-muted-foreground">{sub}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            <Button asChild className="bg-navy hover:bg-navy-light text-white">
-              <Link to="/contact">
-                Nous Contacter
-                <ChevronRight className="w-4 h-4 ml-2" />
-              </Link>
-            </Button>
-          </Reveal>
+          </motion.div>
         </div>
       </div>
     </section>

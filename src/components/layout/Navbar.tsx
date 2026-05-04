@@ -5,6 +5,7 @@ import { Menu, X, ChevronDown, Calendar } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { expertises } from '@/lib/services'
 import { cn } from '@/lib/utils'
+import LangToggle from '@/components/ui/LangToggle'
 
 const mainLinks = [
   { to: '/', label: 'Accueil', end: true },
@@ -133,6 +134,7 @@ export default function Navbar({ transparent = false }: { transparent?: boolean 
               Contact
             </NavLink>
 
+            <LangToggle solid={solid} />
             <Button asChild className="bg-gold hover:bg-gold-dark text-navy font-semibold">
               <Link to="/rendez-vous">Prendre RDV</Link>
             </Button>

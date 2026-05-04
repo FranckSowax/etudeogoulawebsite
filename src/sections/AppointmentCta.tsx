@@ -1,101 +1,68 @@
 import { Link } from 'react-router-dom'
-import { Calendar, Clock, MapPin, Phone, MessageCircle, Video, Building } from 'lucide-react'
+import { motion, useReducedMotion } from 'framer-motion'
+import { Calendar } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import Reveal from '@/components/Reveal'
+import Eyebrow from '@/components/ui/Eyebrow'
+import SectionTitle from '@/components/ui/SectionTitle'
+
+const STEPS = [
+  ['Choisir le motif', 'La durée de l’entretien s’ajuste au sujet à traiter (30 à 60 minutes).'],
+  ['Sélectionner la modalité', 'Présentiel, visioconférence Google Meet ou appel téléphonique.'],
+  ['Réserver le créneau', 'Disponibilités en temps réel sur les quinze prochains jours ouvrés.'],
+  ['Confirmer le rendez-vous', 'Confirmation WhatsApp instantanée et lien d’annulation sécurisé.'],
+]
 
 export default function AppointmentCta() {
+  const reduce = useReducedMotion()
   return (
-    <section id="rendez-vous" className="py-16 sm:py-20 lg:py-24 bg-white">
+    <section id="rendez-vous" aria-label="Prendre rendez-vous" className="bg-paper py-20 sm:py-28">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid lg:grid-cols-2 gap-10 sm:gap-12 items-center">
-          <Reveal>
-            <div className="flex items-center gap-2 mb-4">
-              <div className="w-8 h-[2px] bg-gold" />
-              <span className="text-gold text-sm font-medium tracking-wider uppercase">
-                Rendez-vous en ligne
+        <div className="text-center max-w-3xl mx-auto mb-14 sm:mb-20">
+          <Eyebrow align="center" className="mb-5 justify-center">Rendez-vous</Eyebrow>
+          <SectionTitle align="center" className="mx-auto mb-6">
+            Réserver un entretien en quatre étapes.
+          </SectionTitle>
+          <p className="text-graphite/80 leading-relaxed">
+            À l&rsquo;Étude, en visioconférence ou par téléphone — confirmation WhatsApp et rappels
+            automatiques J-1 et H-2.
+          </p>
+        </div>
+
+        <ol className="grid sm:grid-cols-2 lg:grid-cols-4 gap-x-10 gap-y-12 mb-14">
+          {STEPS.map(([title, desc], i) => (
+            <motion.li
+              key={title}
+              initial={reduce ? false : { opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-50px' }}
+              transition={{ duration: 0.45, delay: i * 0.08, ease: 'easeOut' }}
+              className={
+                'relative pl-0 ' +
+                (i < 3 ? 'lg:border-r lg:border-bronze/25 lg:pr-10' : '')
+              }
+            >
+              <span className="block font-serif text-bronze [font-size:clamp(2.5rem,4vw,3.5rem)] leading-none mb-4">
+                0{i + 1}
               </span>
-            </div>
+              <h3 className="font-serif text-ink text-xl mb-2 leading-tight">{title}</h3>
+              <p className="text-graphite/75 text-sm leading-relaxed">{desc}</p>
+            </motion.li>
+          ))}
+        </ol>
 
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-serif font-bold text-navy mb-5 sm:mb-6">
-              Réservez votre consultation en 4 étapes
-            </h2>
-
-            <p className="text-muted-foreground mb-8 leading-relaxed">
-              Choisissez votre motif, votre modalité (à l'étude, visio ou téléphone) et votre
-              créneau. Vous recevrez une confirmation WhatsApp puis un rappel automatique J-1
-              et 2h avant votre rendez-vous.
-            </p>
-
-            <div className="grid grid-cols-3 gap-3 mb-8">
-              <FormatCard icon={<Building className="w-5 h-5" />} label="À l'étude" />
-              <FormatCard icon={<Video className="w-5 h-5" />} label="En visio" />
-              <FormatCard icon={<Phone className="w-5 h-5" />} label="Par téléphone" />
-            </div>
-
-            <div className="space-y-4 mb-8">
-              <InfoRow icon={<Clock className="w-5 h-5" />}>
-                Lundi au vendredi, 7h30 – 15h30
-              </InfoRow>
-              <InfoRow icon={<MapPin className="w-5 h-5" />}>
-                Bd de la Nation, Imm. Hollando, 6e étage, Libreville
-              </InfoRow>
-              <InfoRow icon={<MessageCircle className="w-5 h-5" />}>
-                Confirmation et rappels par WhatsApp
-              </InfoRow>
-            </div>
-
-            <Button asChild size="lg" className="bg-gold hover:bg-gold-dark text-navy font-semibold h-12 px-8">
-              <Link to="/rendez-vous">
-                <Calendar className="w-5 h-5 mr-2" />
-                Réserver mon rendez-vous
-              </Link>
-            </Button>
-          </Reveal>
-
-          <Reveal delay={0.08} className="bg-cream rounded-lg p-6 sm:p-8 lg:p-10 shadow-elegant">
-            <ol className="space-y-5 sm:space-y-6">
-              {[
-                ['Choisissez votre motif', "La durée du créneau s'ajuste automatiquement (de 30 à 60 min)."],
-                ['Sélectionnez la modalité', 'À l\'étude, visio Google Meet, ou téléphone.'],
-                ['Réservez votre créneau', 'Disponibilités en temps réel sur les 15 prochains jours ouvrés.'],
-                ['Confirmez en 1 clic', 'Confirmation WhatsApp + lien d\'annulation.'],
-              ].map(([title, desc], idx) => (
-                <li key={title} className="flex gap-4">
-                  <div className="flex-shrink-0 w-9 h-9 rounded-full bg-navy text-gold font-bold flex items-center justify-center text-sm">
-                    {idx + 1}
-                  </div>
-                  <div>
-                    <h3 className="font-serif text-base sm:text-lg font-semibold text-navy">{title}</h3>
-                    <p className="text-sm text-muted-foreground mt-1">{desc}</p>
-                  </div>
-                </li>
-              ))}
-            </ol>
-          </Reveal>
+        <div className="text-center">
+          <Button
+            asChild
+            size="lg"
+            className="bg-ink hover:bg-graphite text-paper font-medium tracking-wider uppercase text-xs px-8 h-12 rounded-none"
+          >
+            <Link to="/rendez-vous">
+              <Calendar className="w-4 h-4 mr-2" />
+              Prendre rendez-vous
+            </Link>
+          </Button>
         </div>
       </div>
     </section>
-  )
-}
-
-function FormatCard({ icon, label }: { icon: React.ReactNode; label: string }) {
-  return (
-    <div className="bg-cream rounded-lg p-3 text-center">
-      <div className="w-10 h-10 mx-auto bg-gold/10 rounded-lg flex items-center justify-center text-gold mb-2">
-        {icon}
-      </div>
-      <span className="text-xs font-medium text-navy">{label}</span>
-    </div>
-  )
-}
-
-function InfoRow({ icon, children }: { icon: React.ReactNode; children: React.ReactNode }) {
-  return (
-    <div className="flex items-center gap-3 text-sm text-muted-foreground">
-      <span className="w-9 h-9 bg-gold/10 rounded-lg flex items-center justify-center text-gold flex-shrink-0">
-        {icon}
-      </span>
-      {children}
-    </div>
   )
 }
