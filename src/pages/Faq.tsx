@@ -24,7 +24,7 @@ const faqs = [
     a: 'Certains actes peuvent être signés par procuration authentique. Nous proposons également des consultations en visioconférence pour la préparation de votre dossier. La signature électronique sera prochainement disponible pour certains actes.',
   },
   {
-    q: 'Comment prendre rendez-vous avec le cabinet ?',
+    q: "Comment prendre rendez-vous avec l'étude ?",
     a: 'Vous pouvez réserver directement en ligne via notre formulaire, ou nous appeler aux numéros indiqués. Vous recevrez une confirmation par WhatsApp et un rappel J-1.',
   },
   {
@@ -47,8 +47,8 @@ export default function Faq() {
   return (
     <>
       <Seo
-        title="FAQ Notaire Gabon — Questions Fréquentes | Cabinet Ogoula Nkondawiri"
-        description="Réponses aux questions les plus posées sur le notariat au Gabon : frais, délais, succession, documents, prise de rendez-vous. Cabinet Ogoula Nkondawiri à Libreville."
+        title="FAQ Notaire Gabon — Questions Fréquentes | Étude Ogoula Nkondawiri"
+        description="Réponses aux questions les plus posées sur le notariat au Gabon : frais, délais, succession, documents, prise de rendez-vous. Étude Ogoula Nkondawiri à Libreville."
         canonical="/faq"
         jsonLd={jsonLd}
       />

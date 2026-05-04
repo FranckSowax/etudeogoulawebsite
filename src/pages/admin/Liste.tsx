@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react'
-import { Loader2, RefreshCw } from 'lucide-react'
+import { Loader2, Plus, RefreshCw } from 'lucide-react'
+import AppointmentDetailModal, { type AppointmentDetail } from './AppointmentDetailModal'
+import NewAppointmentModal from './NewAppointmentModal'
 import { toast } from 'sonner'
 import { supabase } from '@/lib/supabase'
 import { Button } from '@/components/ui/button'
@@ -16,6 +18,7 @@ type Appointment = {
   type: 'cabinet' | 'visio' | 'telephone'
   status: string
   duration_minutes: number
+  message: string | null
   created_at: string
 }
 
@@ -30,7 +33,7 @@ const STATUS_LABELS: Record<string, { label: string; class: string }> = {
 }
 
 const TYPE_LABELS: Record<string, string> = {
-  cabinet:   'Cabinet',
+  cabinet:   'Étude',
   visio:     'Visio',
   telephone: 'Tél.',
 }
@@ -40,12 +43,14 @@ export default function AdminListe() {
   const [loading, setLoading] = useState(true)
   const [filter, setFilter] = useState<string>('all')
   const [updatingId, setUpdatingId] = useState<string | null>(null)
+  const [selected, setSelected] = useState<AppointmentDetail | null>(null)
+  const [showNew, setShowNew] = useState(false)
 
   const fetch = () => {
     setLoading(true)
     let q = supabase
       .from('appointments')
-      .select('id, name, phone, email, date, time, motif, type, status, duration_minutes, created_at')
+      .select('id, name, phone, email, date, time, motif, type, status, duration_minutes, message, created_at')
       .order('date', { ascending: false })
       .order('time', { ascending: false })
     if (filter !== 'all') q = q.eq('status', filter)
@@ -77,6 +82,9 @@ export default function AdminListe() {
     <div>
       <div className="flex flex-wrap items-center justify-between gap-3 mb-6">
         <h1 className="font-serif text-2xl font-bold text-navy">Liste des rendez-vous</h1>
+        <Button size="sm" className="bg-navy hover:bg-navy-light text-white" onClick={() => setShowNew(true)}>
+          <Plus className="w-4 h-4 mr-1.5" /> Nouveau RDV
+        </Button>
         <Button variant="outline" size="sm" onClick={fetch}>
           <RefreshCw className="w-4 h-4 mr-1.5" /> Actualiser
         </Button>
@@ -121,7 +129,7 @@ export default function AdminListe() {
                 {appointments.map((a) => {
                   const s = STATUS_LABELS[a.status] ?? { label: a.status, class: 'bg-gray-100 text-gray-700' }
                   return (
-                    <tr key={a.id} className="hover:bg-gray-50 transition-colors">
+                    <tr key={a.id} className="hover:bg-gray-50 transition-colors cursor-pointer" onClick={() => setSelected(a)}>
                       <td className="px-4 py-3 whitespace-nowrap">
                         <p className="font-medium text-navy">{formatDate(a.date)}</p>
                         <p className="text-muted-foreground">{a.time} ({a.duration_minutes} min)</p>
@@ -143,7 +151,7 @@ export default function AdminListe() {
                         ) : (
                           <StatusSelect
                             value={a.status}
-                            onChange={(v) => updateStatus(a.id, v)}
+                            onChange={(v) => updateStatus(a.id, v)} stopPropagation
                           />
                         )}
                       </td>
@@ -159,7 +167,7 @@ export default function AdminListe() {
             {appointments.map((a) => {
               const s = STATUS_LABELS[a.status] ?? { label: a.status, class: 'bg-gray-100 text-gray-700' }
               return (
-                <div key={a.id} className="p-4 space-y-2">
+                <div key={a.id} className="p-4 space-y-2 cursor-pointer hover:bg-gray-50" onClick={() => setSelected(a)}>
                   <div className="flex items-start justify-between gap-2">
                     <div>
                       <p className="font-semibold text-navy">{a.name}</p>
@@ -176,7 +184,7 @@ export default function AdminListe() {
                   {updatingId === a.id ? (
                     <Loader2 className="w-4 h-4 animate-spin text-gold" />
                   ) : (
-                    <StatusSelect value={a.status} onChange={(v) => updateStatus(a.id, v)} />
+                    <StatusSelect value={a.status} onChange={(v) => updateStatus(a.id, v)} stopPropagation />
                   )}
                 </div>
               )
@@ -184,6 +192,8 @@ export default function AdminListe() {
           </div>
         </div>
       )}
+      <NewAppointmentModal open={showNew} onClose={() => setShowNew(false)} onCreated={fetch} />
+      <AppointmentDetailModal appt={selected} onClose={() => setSelected(null)} />
     </div>
   )
 }
@@ -204,11 +214,11 @@ function FilterChip({ label, active, onClick }: { label: string; value: string; 
   )
 }
 
-function StatusSelect({ value, onChange }: { value: string; onChange: (v: string) => void }) {
+function StatusSelect({ value, onChange, stopPropagation }: { value: string; onChange: (v: string) => void; stopPropagation?: boolean }) {
   return (
     <select
       value={value}
-      onChange={(e) => onChange(e.target.value)}
+      onChange={(e) => onChange(e.target.value)} onClick={stopPropagation ? (e) => e.stopPropagation() : undefined}
       className="text-xs border border-border rounded px-2 py-1 text-navy bg-white cursor-pointer"
     >
       {STATUSES.map((s) => (

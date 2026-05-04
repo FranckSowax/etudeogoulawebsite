@@ -384,7 +384,7 @@ function DateTimeStep({
       <h2 className="font-serif text-2xl font-bold text-navy mb-2">Choisissez votre créneau</h2>
       <p className="text-muted-foreground text-sm mb-6">
         Créneau de {durationMinutes} minutes.{' '}
-        {!scheduleLoading && <>Le cabinet est ouvert : {scheduleLabel(schedule)}.</>}
+        {!scheduleLoading && <>L'étude est ouverte : {scheduleLabel(schedule)}.</>}
       </p>
 
       <div className="space-y-6">

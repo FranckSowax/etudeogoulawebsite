@@ -4,7 +4,7 @@ export default function Blog() {
   return (
     <>
       <Seo
-        title="Actualités juridiques — Notaire au Gabon | Cabinet Ogoula Nkondawiri"
+        title="Actualités juridiques — Notaire au Gabon | Étude Ogoula Nkondawiri"
         description="Actualités, conseils et analyses juridiques par l'Étude Notariale Ogoula Nkondawiri : achat immobilier, succession, droit des affaires au Gabon."
         canonical="/blog"
       />

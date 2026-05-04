@@ -5,7 +5,7 @@
 //   - sends a WhatsApp acknowledgement to the client.
 
 import type { Config, Context } from '@netlify/functions'
-import { isWhapiConfigured, sendWhatsappText } from '../lib/whapi'
+import { buildStaffCancellation, isWhapiConfigured, notifyStaff, sendWhatsappText } from '../lib/whapi'
 import { deleteEvent, isGcalConfigured } from '../lib/gcal'
 import { getSupabaseAdmin, type AppointmentRow } from '../lib/supabase'
 
@@ -50,12 +50,26 @@ export default async (req: Request, _context: Context) => {
     try {
       const r = await sendWhatsappText(
         appt.phone,
-        `Bonjour ${appt.name}, votre rendez-vous du ${appt.date} à ${appt.time} a bien été annulé. Vous pouvez réserver un nouveau créneau sur notre site. Cabinet Ogoula Nkondawiri.`,
+        `Bonjour ${appt.name}, votre rendez-vous du ${appt.date} à ${appt.time} a bien été annulé. Vous pouvez réserver un nouveau créneau sur notre site. Étude Ogoula Nkondawiri.`,
       )
       whatsappSent = r.sent
     } catch (err) {
       console.error('WhatsApp ack failed (continuing)', err)
     }
+  }
+
+  // Notify staff (best-effort).
+  try {
+    await notifyStaff(
+      buildStaffCancellation({
+        name: appt.name,
+        date: appt.date,
+        time: appt.time,
+        motif: appt.motif ?? '',
+      }),
+    )
+  } catch (err) {
+    console.error('Staff cancellation notif failed (continuing)', err)
   }
 
   await supabase.from('appointments').update({ gcal_event_id: null }).eq('id', appt.id)

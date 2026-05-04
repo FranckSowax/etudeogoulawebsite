@@ -21,13 +21,13 @@ export default function AppointmentCta() {
             </h2>
 
             <p className="text-muted-foreground mb-8 leading-relaxed">
-              Choisissez votre motif, votre modalité (cabinet, visio ou téléphone) et votre
+              Choisissez votre motif, votre modalité (à l'étude, visio ou téléphone) et votre
               créneau. Vous recevrez une confirmation WhatsApp puis un rappel automatique J-1
               et 2h avant votre rendez-vous.
             </p>
 
             <div className="grid grid-cols-3 gap-3 mb-8">
-              <FormatCard icon={<Building className="w-5 h-5" />} label="Au cabinet" />
+              <FormatCard icon={<Building className="w-5 h-5" />} label="À l'étude" />
               <FormatCard icon={<Video className="w-5 h-5" />} label="En visio" />
               <FormatCard icon={<Phone className="w-5 h-5" />} label="Par téléphone" />
             </div>
@@ -56,7 +56,7 @@ export default function AppointmentCta() {
             <ol className="space-y-5 sm:space-y-6">
               {[
                 ['Choisissez votre motif', "La durée du créneau s'ajuste automatiquement (de 30 à 60 min)."],
-                ['Sélectionnez la modalité', 'Cabinet, visio Google Meet, ou téléphone.'],
+                ['Sélectionnez la modalité', 'À l\'étude, visio Google Meet, ou téléphone.'],
                 ['Réservez votre créneau', 'Disponibilités en temps réel sur les 15 prochains jours ouvrés.'],
                 ['Confirmez en 1 clic', 'Confirmation WhatsApp + lien d\'annulation.'],
               ].map(([title, desc], idx) => (

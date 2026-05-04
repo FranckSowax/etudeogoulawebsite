@@ -46,8 +46,8 @@ export default function Confirmation() {
   return (
     <>
       <Seo
-        title="Confirmation de rendez-vous — Cabinet Ogoula Nkondawiri"
-        description="Récapitulatif de votre rendez-vous au Cabinet Notarial Ogoula Nkondawiri à Libreville."
+        title="Confirmation de rendez-vous — Étude Ogoula Nkondawiri"
+        description="Récapitulatif de votre rendez-vous à l'Étude Notariale Ogoula Nkondawiri à Libreville."
       />
 
       <section className="bg-navy py-12 sm:py-14 lg:py-16">
@@ -117,7 +117,7 @@ export default function Confirmation() {
                     <li>• Adresse : Boulevard de la Nation, Immeuble Hollando, 6ème étage, Libreville.</li>
                   )}
                   {appt.type === 'telephone' && (
-                    <li>• Le cabinet vous appelle au numéro communiqué à l'heure du rendez-vous.</li>
+                    <li>• L'étude vous appelle au numéro communiqué à l'heure du rendez-vous.</li>
                   )}
                 </ul>
               </div>

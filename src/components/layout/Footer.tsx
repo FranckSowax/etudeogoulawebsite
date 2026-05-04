@@ -9,9 +9,9 @@ export default function Footer() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
           <div className="sm:col-span-2">
             <Link to="/" className="flex items-center gap-3 mb-4">
-              <img src="/logo.png" alt="Cabinet Notarial S.O. Nkondawiri" className="h-12 w-auto" />
+              <img src="/logo.png" alt="Étude Notariale S.O. Nkondawiri" className="h-12 w-auto" />
               <div>
-                <p className="font-serif font-semibold text-white">Cabinet Notarial</p>
+                <p className="font-serif font-semibold text-white">Étude Notariale</p>
                 <p className="text-xs text-gold">S.O. Nkondawiri</p>
               </div>
             </Link>
@@ -59,7 +59,7 @@ export default function Footer() {
 
         <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-gray-500 text-sm">
-            © {new Date().getFullYear()} Cabinet Notarial Suzanne Ogoula Nkondawiri. Tous droits réservés.
+            © {new Date().getFullYear()} Étude Notariale Suzanne Ogoula Nkondawiri. Tous droits réservés.
           </p>
           <p className="text-gray-500 text-sm">
             Notaire achat immobilier Gabon — Libreville, République Gabonaise

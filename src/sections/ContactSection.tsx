@@ -43,7 +43,7 @@ export default function ContactSection() {
             </h2>
 
             <p className="text-gray-300 mb-8 leading-relaxed">
-              Notre cabinet notarial à Libreville est à votre disposition pour tout
+              Notre étude notariale à Libreville est à votre disposition pour tout
               achat immobilier au Gabon, conseil juridique et démarches notariales.
             </p>
 

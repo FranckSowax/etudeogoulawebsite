@@ -43,7 +43,7 @@ export const motifs: Motif[] = [
   {
     slug: 'acte',
     label: "Authentification / signature d'acte",
-    description: "Procuration, reconnaissance de dette, dépôt d'écrit, signature au cabinet.",
+    description: "Procuration, reconnaissance de dette, dépôt d'écrit, signature à l'étude.",
     icon: FileText,
     durationMinutes: 30,
   },
@@ -73,7 +73,7 @@ export type AppointmentTypeOption = {
 export const appointmentTypes: AppointmentTypeOption[] = [
   {
     slug: 'cabinet',
-    label: 'Au cabinet',
+    label: "À l'étude",
     description: "Boulevard de la Nation, Immeuble Hollando, 6ème étage à Libreville.",
     hint: 'Recommandé pour la signature et les dossiers complexes',
   },
@@ -86,7 +86,7 @@ export const appointmentTypes: AppointmentTypeOption[] = [
   {
     slug: 'telephone',
     label: 'Par téléphone',
-    description: "Le cabinet vous appelle au numéro indiqué à l'heure du créneau.",
+    description: "L'étude vous appelle au numéro indiqué à l'heure du créneau.",
     hint: 'Pratique pour une première consultation rapide',
   },
 ]

@@ -37,7 +37,7 @@ export default function AdminLogin() {
     <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
       <div className="w-full max-w-sm">
         <div className="text-center mb-8">
-          <img src="/logo.png" alt="Cabinet Ogoula" className="h-16 mx-auto mb-4" />
+          <img src="/logo.png" alt="Étude Ogoula" className="h-16 mx-auto mb-4" />
           <h1 className="font-serif text-2xl font-bold text-navy">Accès réservé</h1>
           <p className="text-sm text-muted-foreground mt-1">Espace notaire et secrétariat</p>
         </div>

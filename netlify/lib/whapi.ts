@@ -109,7 +109,7 @@ export function buildConfirmationInteractive(args: ConfirmationArgs): Interactiv
   const lines = [
     `Bonjour ${args.name},`,
     '',
-    `Votre rendez-vous au Cabinet Notarial Suzanne Ogoula Nkondawiri est enregistré :`,
+    `Votre rendez-vous à l'Étude Notariale Suzanne Ogoula Nkondawiri est enregistré :`,
     '',
     `📅 ${formatDate(args.date)}`,
     `🕒 ${args.time}`,
@@ -120,12 +120,12 @@ export function buildConfirmationInteractive(args: ConfirmationArgs): Interactiv
   } else if (args.type === 'visio') {
     lines.push(args.meetLink ? `🎥 Visio : ${args.meetLink}` : '🎥 Visio (lien à suivre)')
   } else {
-    lines.push("☎️ Le cabinet vous appellera au numéro indiqué.")
+    lines.push("☎️ L'étude vous appellera au numéro indiqué.")
   }
 
   return {
     body: { text: lines.join('\n') },
-    footer: { text: 'Cabinet Ogoula Nkondawiri' },
+    footer: { text: 'Étude Ogoula Nkondawiri' },
     action: {
       buttons: [
         { type: 'url', title: 'Annuler le RDV', id: 'cancel', url: args.cancelUrl },
@@ -147,7 +147,7 @@ export function buildReminderInteractive(args: ReminderArgs): InteractivePayload
   return {
     header: { text: `Bonjour ${args.name}` },
     body: { text: lines.join('\n') },
-    footer: { text: 'Cabinet Ogoula Nkondawiri' },
+    footer: { text: 'Étude Ogoula Nkondawiri' },
     action: {
       buttons: [
         { type: 'url', title: 'Annuler le RDV', id: 'cancel', url: args.cancelUrl },
@@ -161,7 +161,7 @@ export function buildConfirmationMessage(args: ConfirmationArgs) {
   const lines = [
     `Bonjour ${args.name},`,
     '',
-    `Votre rendez-vous au Cabinet Notarial Suzanne Ogoula Nkondawiri est enregistré :`,
+    `Votre rendez-vous à l'Étude Notariale Suzanne Ogoula Nkondawiri est enregistré :`,
     '',
     `📅 Date : ${formatDate(args.date)}`,
     `🕒 Heure : ${args.time}`,
@@ -172,12 +172,12 @@ export function buildConfirmationMessage(args: ConfirmationArgs) {
   } else if (args.type === 'visio') {
     lines.push(args.meetLink ? `🎥 Visio : ${args.meetLink}` : '🎥 Visio (lien à suivre)')
   } else {
-    lines.push("☎️ Le cabinet vous appellera au numéro indiqué.")
+    lines.push("☎️ L'étude vous appellera au numéro indiqué.")
   }
   lines.push('')
   lines.push(`Pour annuler ou reporter : ${args.cancelUrl}`)
   lines.push('')
-  lines.push('À bientôt — Cabinet Ogoula Nkondawiri')
+  lines.push('À bientôt — Étude Ogoula Nkondawiri')
   return lines.join('\n')
 }
 
@@ -201,4 +201,91 @@ function formatDate(iso: string) {
     month: 'long',
     year: 'numeric',
   })
+}
+
+// ─── Staff notifications ──────────────────────────────────────────────────────
+
+type StaffNotificationArgs = {
+  name: string
+  phone: string
+  motif: string
+  date: string
+  time: string
+  type: 'cabinet' | 'visio' | 'telephone'
+  email?: string | null
+  message?: string | null
+  adminUrl?: string
+}
+
+const STAFF_TYPE_LABELS: Record<'cabinet' | 'visio' | 'telephone', string> = {
+  cabinet:   '🏛 À l\'étude',
+  visio:     '🎥 Visio',
+  telephone: '📞 Téléphone',
+}
+
+/** Plain-text notification sent to staff phones whenever a new RDV is booked. */
+export function buildStaffNotification(args: StaffNotificationArgs): string {
+  const lines = [
+    '🆕 NOUVEAU RDV',
+    '',
+    `👤 ${args.name}`,
+    `📱 ${args.phone}`,
+  ]
+  if (args.email) lines.push(`✉️ ${args.email}`)
+  lines.push('')
+  lines.push(`📅 ${formatDate(args.date)} à ${args.time}`)
+  lines.push(`📌 ${args.motif}`)
+  lines.push(STAFF_TYPE_LABELS[args.type])
+  if (args.message) {
+    lines.push('')
+    lines.push(`📝 Note : ${args.message}`)
+  }
+  if (args.adminUrl) {
+    lines.push('')
+    lines.push(`🔗 ${args.adminUrl}`)
+  }
+  return lines.join('\n')
+}
+
+export function buildStaffCancellation(args: {
+  name: string
+  date: string
+  time: string
+  motif: string
+}): string {
+  return [
+    '❌ RDV ANNULÉ',
+    '',
+    `👤 ${args.name}`,
+    `📅 ${formatDate(args.date)} à ${args.time}`,
+    `📌 ${args.motif}`,
+  ].join('\n')
+}
+
+/** Comma-separated list of staff phones (international format, e.g. 24177373500). */
+export function getStaffPhones(): string[] {
+  const raw = process.env.STAFF_PHONES?.trim()
+  if (!raw) return []
+  return raw.split(',').map((s) => s.trim()).filter(Boolean)
+}
+
+/** Best-effort: send the same plain-text message to every configured staff phone. */
+export async function notifyStaff(message: string): Promise<{ sent: number; failed: number }> {
+  const phones = getStaffPhones()
+  if (phones.length === 0 || !isWhapiConfigured()) return { sent: 0, failed: 0 }
+  let sent = 0
+  let failed = 0
+  await Promise.all(
+    phones.map(async (phone) => {
+      try {
+        const r = await sendWhatsappText(phone, message)
+        if (r.sent) sent++
+        else failed++
+      } catch (err) {
+        console.error(`Staff WhatsApp failed for ${phone}`, err)
+        failed++
+      }
+    }),
+  )
+  return { sent, failed }
 }

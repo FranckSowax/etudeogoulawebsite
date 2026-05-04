@@ -5,8 +5,8 @@ export default function RendezVous() {
   return (
     <>
       <Seo
-        title="Prendre Rendez-vous — Notaire à Libreville, Gabon | Cabinet Ogoula Nkondawiri"
-        description="Prenez rendez-vous en ligne avec Maître Suzanne Ogoula Nkondawiri à Libreville. Consultation au cabinet, en visio ou par téléphone. Confirmation WhatsApp."
+        title="Prendre Rendez-vous — Notaire à Libreville, Gabon | Étude Ogoula Nkondawiri"
+        description="Prenez rendez-vous en ligne avec Maître Suzanne Ogoula Nkondawiri à Libreville. Consultation à l'étude, en visio ou par téléphone. Confirmation WhatsApp."
         canonical="/rendez-vous"
       />
 

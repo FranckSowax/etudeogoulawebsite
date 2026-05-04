@@ -60,12 +60,12 @@ export default function Navbar({ transparent = false }: { transparent?: boolean 
           <Link to="/" className="flex items-center gap-2 sm:gap-3 min-w-0">
             <img
               src="/logo.png"
-              alt="Cabinet Notarial S.O. Nkondawiri"
+              alt="Étude Notariale S.O. Nkondawiri"
               className="h-10 sm:h-12 md:h-14 w-auto flex-shrink-0"
             />
             <div className="hidden sm:block min-w-0">
               <p className={cn('font-serif font-semibold text-base md:text-lg leading-tight truncate', solid ? 'text-navy' : 'text-white')}>
-                Cabinet Notarial
+                Étude Notariale
               </p>
               <p className={cn('text-xs', solid ? 'text-gold' : 'text-gold-light')}>
                 S.O. Nkondawiri

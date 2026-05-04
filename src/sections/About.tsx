@@ -46,9 +46,9 @@ export default function About() {
             </h2>
 
             <p className="text-muted-foreground mb-6 leading-relaxed">
-              Le Cabinet Notarial Suzanne Ogoula Nkondawiri est une étude de notariat
+              L'Étude Notariale Suzanne Ogoula Nkondawiri est une étude de notariat
               établie à Libreville, capitale de la République Gabonaise. Spécialisé dans
-              l'achat et la vente immobilière au Gabon, notre cabinet accompagne
+              l'achat et la vente immobilière au Gabon, notre étude accompagne
               particuliers et entreprises dans toutes leurs transactions notariales.
             </p>
 

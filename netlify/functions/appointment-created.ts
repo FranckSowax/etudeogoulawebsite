@@ -6,6 +6,8 @@
 import type { Config, Context } from '@netlify/functions'
 import {
   buildConfirmationInteractive,
+  buildStaffNotification,
+  notifyStaff,
   buildConfirmationMessage,
   isWhapiConfigured,
   sendWhatsappInteractive,
@@ -120,8 +122,29 @@ export default async (req: Request, _context: Context) => {
     whapi = { sent: false, error: 'WHAPI_TOKEN not configured' }
   }
 
+  // Notify staff (best-effort — never blocks the booking flow).
+
+  try {
+    await notifyStaff(
+      buildStaffNotification({
+        name: appt.name,
+        phone: appt.phone,
+        motif: appt.motif ?? appt.service ?? '',
+        date: appt.date,
+        time: appt.time,
+        type: appt.type,
+        email: appt.email,
+        message: appt.message,
+        adminUrl: `${SITE_URL}/admin/liste`,
+      }),
+    )
+  } catch (err) {
+    console.error('Staff notification failed (continuing)', err)
+  }
+
+
   // Promote to 'confirmed' if at least one integration succeeded;
-  // otherwise leave 'pending' so the cabinet can confirm manually.
+  // otherwise leave 'pending' so the étude can confirm manually.
   const anySucceeded = Boolean(gcalEventId) || whapi.sent
   await supabase
     .from('appointments')

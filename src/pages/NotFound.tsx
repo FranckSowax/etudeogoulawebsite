@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button'
 export default function NotFound() {
   return (
     <>
-      <Seo title="Page introuvable — Cabinet Ogoula Nkondawiri" description="La page recherchée n'existe pas." />
+      <Seo title="Page introuvable — Étude Ogoula Nkondawiri" description="La page recherchée n'existe pas." />
       <section className="min-h-[60vh] flex items-center justify-center bg-cream">
         <div className="text-center px-4">
           <p className="text-gold font-medium tracking-wider uppercase text-sm">Erreur 404</p>

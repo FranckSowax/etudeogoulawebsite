@@ -25,7 +25,7 @@ export default function ExpertiseDetail() {
     description: service.description,
     provider: {
       '@type': 'Notary',
-      name: 'Cabinet Notarial Suzanne Ogoula Nkondawiri',
+      name: 'Étude Notariale Suzanne Ogoula Nkondawiri',
       address: {
         '@type': 'PostalAddress',
         streetAddress: 'Boulevard de la Nation, Immeuble Hollando, 6ème étage',
@@ -162,10 +162,10 @@ export default function ExpertiseDetail() {
               </h2>
               <ol className="space-y-4">
                 {[
-                  ['Prise de rendez-vous', "Choisissez un créneau en ligne, en visio ou au cabinet à Libreville."],
+                  ['Prise de rendez-vous', "Choisissez un créneau en ligne, en visio ou à l'étude à Libreville."],
                   ['Étude de votre dossier', 'Nous analysons votre situation et listons les pièces nécessaires.'],
                   ["Rédaction de l'acte", 'Nos clercs préparent l\'acte avec rigueur, en lien étroit avec vous.'],
-                  ['Signature & enregistrement', 'Signature au cabinet, puis enregistrement et conservation dans nos archives.'],
+                  ['Signature & enregistrement', "Signature à l'étude, puis enregistrement et conservation dans nos archives."],
                 ].map(([title, desc], idx) => (
                   <li key={title} className="flex gap-4 bg-white rounded-lg p-5 shadow-sm">
                     <div className="flex-shrink-0 w-9 h-9 rounded-full bg-gold text-navy font-bold flex items-center justify-center text-sm">

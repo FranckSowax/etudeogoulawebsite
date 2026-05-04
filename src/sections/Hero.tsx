@@ -22,7 +22,7 @@ export default function Hero() {
       <div className="absolute inset-0">
         <img
           src="/hero-notary.jpg"
-          alt="Cabinet notarial pour achat immobilier au Gabon - Notaire Ogoula Nkondawiri à Libreville"
+          alt="Étude notariale pour achat immobilier au Gabon - Notaire Ogoula Nkondawiri à Libreville"
           className="w-full h-full object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-r from-navy/95 via-navy/85 to-navy/50" />

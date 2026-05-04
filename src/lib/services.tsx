@@ -53,7 +53,7 @@ export const expertises: Expertise[] = [
     ],
     metaTitle: 'Notaire Achat Immobilier Gabon — Vente, Donation, Hypothèque | Libreville',
     metaDescription:
-      "Cabinet notarial à Libreville pour l'achat immobilier au Gabon. Actes de vente, donation, hypothèques. Sécurité juridique garantie.",
+      "Étude notariale à Libreville pour l'achat immobilier au Gabon. Actes de vente, donation, hypothèques. Sécurité juridique garantie.",
     intro: [
       "L'achat immobilier au Gabon est une opération qui engage durablement votre patrimoine. Le notaire, officier public, est le garant de la sécurité juridique de la transaction : il vérifie le titre de propriété, contrôle l'origine du bien sur 30 ans, s'assure de la liberté du vendeur et procède à l'inscription du nouveau propriétaire à la conservation foncière.",
       "Implantée à Libreville depuis près de vingt ans, l'Étude Notariale Ogoula Nkondawiri accompagne particuliers, expatriés et investisseurs dans toutes leurs transactions immobilières au Gabon : achat d'un terrain, d'une villa, d'un appartement, vente d'un bien, donation, hypothèque ou bail commercial.",
@@ -68,7 +68,7 @@ export const expertises: Expertise[] = [
         heading: 'Achat immobilier au Gabon : les étapes clés',
         paragraphs: [
           "Toute transaction immobilière au Gabon débute par une promesse de vente ou un compromis qui fixe les conditions de l'opération. Le notaire vérifie alors le titre foncier, l'absence de servitudes ou d'inscriptions hypothécaires et la conformité urbanistique du bien.",
-          "Vient ensuite la signature de l'acte authentique de vente au cabinet : le prix est versé sur le compte séquestre de l'étude, l'acte est signé par les parties, puis enregistré et publié à la conservation foncière. Le nouvel acquéreur reçoit, à l'issue de cette procédure, un titre foncier à son nom.",
+          "Vient ensuite la signature de l'acte authentique de vente à l'étude : le prix est versé sur le compte séquestre de l'étude, l'acte est signé par les parties, puis enregistré et publié à la conservation foncière. Le nouvel acquéreur reçoit, à l'issue de cette procédure, un titre foncier à son nom.",
         ],
       },
       {
@@ -197,10 +197,10 @@ export const expertises: Expertise[] = [
     ],
     metaTitle: 'Notaire Droit de la Famille Gabon — Mariage, Divorce, Adoption | Libreville',
     metaDescription:
-      'Cabinet notarial à Libreville : contrat de mariage, divorce, adoption au Gabon. Conseil et accompagnement personnalisé.',
+      'Étude notariale à Libreville : contrat de mariage, divorce, adoption au Gabon. Conseil et accompagnement personnalisé.',
     intro: [
       "Le droit de la famille touche aux moments les plus importants de la vie : mariage, naissance d'un enfant, séparation, transmission. À chacune de ces étapes, le notaire conseille, sécurise et formalise les choix patrimoniaux qui engagent la famille sur le long terme.",
-      "Notre cabinet accompagne couples, parents et enfants au Gabon avec la même exigence d'écoute et de discrétion, qu'il s'agisse de rédiger un contrat de mariage, de liquider un régime matrimonial après divorce ou d'organiser une adoption.",
+      "Notre étude accompagne couples, parents et enfants au Gabon avec la même exigence d'écoute et de discrétion, qu'il s'agisse de rédiger un contrat de mariage, de liquider un régime matrimonial après divorce ou d'organiser une adoption.",
     ],
     sections: [
       {
@@ -235,7 +235,7 @@ export const expertises: Expertise[] = [
       },
       {
         q: 'Comment se passe la liquidation après un divorce ?',
-        a: "Le notaire évalue les biens communs, calcule la part de chaque époux et propose un projet de partage. Si un accord est trouvé, l'acte de partage est signé au cabinet. Sinon, le tribunal tranche.",
+        a: "Le notaire évalue les biens communs, calcule la part de chaque époux et propose un projet de partage. Si un accord est trouvé, l'acte de partage est signé à l'étude. Sinon, le tribunal tranche.",
       },
     ],
   },

@@ -8,7 +8,7 @@ export default function Expertises() {
   return (
     <>
       <Seo
-        title="Domaines d'Expertise — Notaire au Gabon | Cabinet Ogoula Nkondawiri"
+        title="Domaines d'Expertise — Notaire au Gabon | Étude Ogoula Nkondawiri"
         description="Tous les domaines d'expertise de l'Étude Notariale Ogoula Nkondawiri à Libreville : immobilier, successions, famille, sociétés, authentification, conseil patrimonial."
         canonical="/expertises"
       />

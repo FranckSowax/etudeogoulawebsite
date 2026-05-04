@@ -37,8 +37,8 @@ export default function Annulation() {
   return (
     <>
       <Seo
-        title="Annulation de rendez-vous — Cabinet Ogoula Nkondawiri"
-        description="Annulez votre rendez-vous en un clic auprès du Cabinet Notarial Ogoula Nkondawiri."
+        title="Annulation de rendez-vous — Étude Ogoula Nkondawiri"
+        description="Annulez votre rendez-vous en un clic auprès du Étude Notariale Ogoula Nkondawiri."
       />
 
       <section className="bg-navy py-12 sm:py-14 lg:py-16">

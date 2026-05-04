@@ -22,7 +22,7 @@ export default function Services() {
           </h2>
 
           <p className="text-sm sm:text-base text-muted-foreground">
-            Notre cabinet notarial à Libreville offre une gamme complète de services :
+            Notre étude notariale à Libreville offre une gamme complète de services :
             achat immobilier, vente, succession, droit des affaires et actes authentiques au Gabon.
           </p>
         </Reveal>

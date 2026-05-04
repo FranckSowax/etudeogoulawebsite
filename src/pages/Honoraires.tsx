@@ -8,8 +8,8 @@ export default function Honoraires() {
   return (
     <>
       <Seo
-        title="Honoraires & Tarifs — Notaire au Gabon | Cabinet Ogoula Nkondawiri"
-        description="Tarifs indicatifs et émoluments du notaire au Gabon : achat immobilier, succession, société, actes authentiques. Transparence et conseil au cabinet Ogoula Nkondawiri à Libreville."
+        title="Honoraires & Tarifs — Notaire au Gabon | Étude Ogoula Nkondawiri"
+        description="Tarifs indicatifs et émoluments du notaire au Gabon : achat immobilier, succession, société, actes authentiques. Transparence et conseil à l'étude Ogoula Nkondawiri à Libreville."
         canonical="/honoraires"
       />
 
