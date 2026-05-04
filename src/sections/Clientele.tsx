@@ -1,30 +1,21 @@
 import { motion, useReducedMotion } from 'framer-motion'
 import Eyebrow from '@/components/ui/Eyebrow'
 import SectionTitle from '@/components/ui/SectionTitle'
-
-const ITEMS = [
-  'Investisseurs institutionnels',
-  'Promoteurs et opérateurs immobiliers',
-  'Dirigeants et family offices',
-  'Particuliers exigeants et expatriés',
-  'Groupes et entreprises de l’espace OHADA',
-  'Institutions publiques et collectivités',
-]
+import { useT } from '@/lib/i18n'
 
 export default function Clientele() {
+  const t = useT()
   const reduce = useReducedMotion()
   return (
-    <section aria-label="Notre clientèle" className="bg-cream py-16 sm:py-20">
+    <section aria-label={t.clientele.eyebrow} className="bg-cream py-16 sm:py-20">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-10 sm:mb-14">
-          <Eyebrow align="center" className="mb-4">Clientèle</Eyebrow>
-          <SectionTitle align="center" className="mx-auto">
-            Une clientèle exigeante, locale et internationale.
-          </SectionTitle>
+          <Eyebrow align="center" className="mb-4">{t.clientele.eyebrow}</Eyebrow>
+          <SectionTitle align="center" className="mx-auto">{t.clientele.title}</SectionTitle>
         </div>
 
         <ul className="grid sm:grid-cols-2 gap-x-12 gap-y-3 max-w-3xl mx-auto">
-          {ITEMS.map((item, i) => (
+          {t.clientele.items.map((item, i) => (
             <motion.li
               key={item}
               initial={reduce ? false : { opacity: 0, x: -10 }}

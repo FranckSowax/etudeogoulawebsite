@@ -6,17 +6,18 @@ import { Button } from '@/components/ui/button'
 import { expertises } from '@/lib/services'
 import { cn } from '@/lib/utils'
 import LangToggle from '@/components/ui/LangToggle'
-
-const mainLinks = [
-  { to: '/', label: 'Accueil', end: true },
-  { to: '/etude', label: "L'Étude" },
-  { to: '/honoraires', label: 'Honoraires' },
-  { to: '/blog', label: 'Actualités' },
-  { to: '/faq', label: 'FAQ' },
-  { to: '/contact', label: 'Contact' },
-]
+import { useT } from '@/lib/i18n'
 
 export default function Navbar({ transparent = false }: { transparent?: boolean }) {
+  const t = useT()
+  const mainLinks = [
+    { to: '/', label: t.nav.home, end: true },
+    { to: '/etude', label: t.nav.etude },
+    { to: '/honoraires', label: t.nav.honoraires },
+    { to: '/blog', label: t.nav.blog },
+    { to: '/faq', label: t.nav.faq },
+    { to: '/contact', label: t.nav.contact },
+  ]
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const [expertisesOpen, setExpertisesOpen] = useState(false)
@@ -56,12 +57,12 @@ export default function Navbar({ transparent = false }: { transparent?: boolean 
         solid ? 'bg-white/95 backdrop-blur shadow-sm' : 'bg-transparent',
       )}
     >
-      <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" aria-label="Navigation principale">
+      <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" aria-label={t.nav.home}>
         <div className="flex items-center justify-between h-16 md:h-20">
           <Link to="/" className="flex items-center gap-2 sm:gap-3 min-w-0">
             <img
               src="/logo.png"
-              alt="Étude Notariale S.O. Nkondawiri"
+              alt="Étude Ogoula Nkondawiri"
               className="h-10 sm:h-12 md:h-14 w-auto flex-shrink-0"
             />
             <div className="hidden sm:block min-w-0">
@@ -136,7 +137,7 @@ export default function Navbar({ transparent = false }: { transparent?: boolean 
 
             <LangToggle solid={solid} />
             <Button asChild className="bg-gold hover:bg-gold-dark text-navy font-semibold">
-              <Link to="/rendez-vous">Prendre RDV</Link>
+              <Link to="/rendez-vous">{t.nav.bookAppointmentLong}</Link>
             </Button>
           </div>
 
@@ -156,7 +157,7 @@ export default function Navbar({ transparent = false }: { transparent?: boolean 
               type="button"
               className="p-2 -mr-2 rounded-md focus:outline-none focus-visible:ring-2 focus-visible:ring-gold"
               onClick={() => setIsMenuOpen((v) => !v)}
-              aria-label={isMenuOpen ? 'Fermer le menu' : 'Ouvrir le menu'}
+              aria-label={isMenuOpen ? t.nav.closeMenu : t.nav.openMenu}
               aria-expanded={isMenuOpen}
             >
               {isMenuOpen ? (
@@ -214,7 +215,7 @@ export default function Navbar({ transparent = false }: { transparent?: boolean 
               </details>
               <div className="pt-3">
                 <Button asChild className="w-full bg-gold hover:bg-gold-dark text-navy font-semibold h-12">
-                  <Link to="/rendez-vous">Prendre RDV</Link>
+                  <Link to="/rendez-vous">{t.nav.bookAppointmentLong}</Link>
                 </Button>
               </div>
             </div>

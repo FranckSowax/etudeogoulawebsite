@@ -2,8 +2,10 @@ import { motion, useReducedMotion } from 'framer-motion'
 import { Mail, MapPin, Phone, Clock } from 'lucide-react'
 import Eyebrow from '@/components/ui/Eyebrow'
 import SectionTitle from '@/components/ui/SectionTitle'
+import { useT } from '@/lib/i18n'
 
 export default function ContactSection() {
+  const t = useT()
   const reduce = useReducedMotion()
   const fade = (delay = 0) =>
     reduce
@@ -16,20 +18,17 @@ export default function ContactSection() {
         }
 
   return (
-    <section id="contact" aria-label="Contact" className="bg-cream py-20 sm:py-28">
+    <section id="contact" aria-label={t.contact.eyebrow} className="bg-cream py-20 sm:py-28">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-3xl mx-auto mb-14">
-          <Eyebrow align="center" className="mb-5 justify-center">Contact</Eyebrow>
-          <SectionTitle align="center" className="mx-auto">
-            Au cœur du quartier d&rsquo;affaires de Libreville.
-          </SectionTitle>
+          <Eyebrow align="center" className="mb-5 justify-center">{t.contact.eyebrow}</Eyebrow>
+          <SectionTitle align="center" className="mx-auto">{t.contact.title}</SectionTitle>
         </div>
 
         <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-start">
-          {/* Map placeholder — Google Maps embed */}
           <motion.div {...fade(0)} className="aspect-[4/3] bg-navy/5 border border-gold/20 overflow-hidden">
             <iframe
-              title="Plan d'accès — Étude Notariale Ogoula Nkondawiri"
+              title={t.contact.mapTitle}
               src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d3978.0!2d9.4673!3d0.4162!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2sLibreville%2C+Gabon!5e0!3m2!1sfr!2sga!4v0"
               width="100%"
               height="100%"
@@ -41,28 +40,27 @@ export default function ContactSection() {
 
           <motion.div {...fade(0.1)}>
             <dl className="divide-y divide-gold/20">
-              <Row icon={<MapPin />} label="Adresse">
-                Boulevard de la Nation, Immeuble Hollando, 6ᵉ étage<br />
-                BP 8350 — Libreville, République Gabonaise
+              <Row icon={<MapPin />} label={t.contact.rows.address}>
+                {t.contact.addressLines[0]}<br />
+                {t.contact.addressLines[1]}
               </Row>
-              <Row icon={<Phone />} label="Téléphone">
+              <Row icon={<Phone />} label={t.contact.rows.phone}>
                 <a href="tel:+24177373500" className="hover:text-gold transition-colors">011 77 37 35</a>
                 {' · '}
                 <a href="tel:+24166151220" className="hover:text-gold transition-colors">066 15 12 20</a>
               </Row>
-              <Row icon={<Mail />} label="Courriel">
+              <Row icon={<Mail />} label={t.contact.rows.email}>
                 <a href="mailto:contact@notaire-nkondawiri.ga" className="hover:text-gold transition-colors">
                   contact@notaire-nkondawiri.ga
                 </a>
               </Row>
-              <Row icon={<Clock />} label="Horaires">
-                Lundi au vendredi · 7h30 – 15h30
+              <Row icon={<Clock />} label={t.contact.rows.hours}>
+                {t.contact.hoursValue}
               </Row>
             </dl>
 
             <p className="mt-8 text-muted-foreground/55 text-xs italic leading-relaxed border-t border-gold/20 pt-6">
-              L&rsquo;Étude est tenue au secret professionnel et à la protection de vos données
-              personnelles conformément aux dispositions de la CNPDCP.
+              {t.contact.privacy}
             </p>
           </motion.div>
         </div>

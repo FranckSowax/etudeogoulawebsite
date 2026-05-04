@@ -1,4 +1,5 @@
 import { lazy, Suspense } from 'react'
+import { I18nProvider } from '@/lib/i18n'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import PublicLayout from '@/components/layout/PublicLayout'
 import AdminLayout from '@/components/layout/AdminLayout'
@@ -32,7 +33,7 @@ function PageFallback() {
 
 export default function App() {
   return (
-    <BrowserRouter>
+    <I18nProvider><BrowserRouter>
       <Routes>
         {/* Admin: login has no layout; dashboard pages are under AdminLayout */}
         <Route
@@ -162,6 +163,6 @@ export default function App() {
           />
         </Route>
       </Routes>
-    </BrowserRouter>
+    </BrowserRouter></I18nProvider>
   )
 }

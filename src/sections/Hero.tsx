@@ -3,8 +3,10 @@ import { motion, useReducedMotion } from 'framer-motion'
 import { Calendar, MapPin, Phone } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import Eyebrow from '@/components/ui/Eyebrow'
+import { useT } from '@/lib/i18n'
 
 export default function Hero() {
+  const t = useT()
   const reduce = useReducedMotion()
   const fade = (delay = 0) =>
     reduce
@@ -20,41 +22,37 @@ export default function Hero() {
       id="accueil"
       className="relative min-h-[90svh] md:min-h-screen flex items-center bg-navy text-white overflow-hidden"
     >
-      {/* Background image with desaturation + ink overlay */}
       <div className="absolute inset-0">
         <img
           src="/hero-notary.jpg"
-          alt="Étude notariale Ogoula Nkondawiri à Libreville, Gabon"
+          alt={t.about.imageAlt}
           className="w-full h-full object-cover opacity-40 grayscale-[40%]"
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-ink via-navy/85 to-navy/40" />
+        <div className="absolute inset-0 bg-gradient-to-r from-navy via-navy/85 to-navy/40" />
         <div className="absolute inset-0 bg-gradient-to-t from-navy/80 via-transparent to-navy/40" />
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 sm:py-28 lg:py-36 w-full">
         <div className="max-w-3xl">
           <motion.div {...fade(0)}>
-            <Eyebrow tone="paper" className="mb-8">
-              Étude Notariale — Libreville, République Gabonaise
-            </Eyebrow>
+            <Eyebrow tone="paper" className="mb-8">{t.hero.eyebrow}</Eyebrow>
           </motion.div>
 
           <motion.h1
             {...fade(0.1)}
             className="font-serif font-medium text-white [font-size:clamp(2.5rem,5.5vw,4.5rem)] leading-[1.05] tracking-[-0.015em] mb-7"
           >
-            Notaire à Libreville. Conseil patrimonial,{' '}
-            <span className="text-gold">droit immobilier</span> et{' '}
-            <span className="text-gold">droit OHADA</span>.
+            {t.hero.titleLead}{' '}
+            <span className="text-gold">{t.hero.titleAccent1}</span>{' '}
+            {t.hero.titleAnd}{' '}
+            <span className="text-gold">{t.hero.titleAccent2}</span>{t.hero.titleEnd}
           </motion.h1>
 
           <motion.p
             {...fade(0.2)}
             className="text-white/75 [font-size:clamp(1rem,1.4vw,1.125rem)] leading-relaxed max-w-2xl mb-10"
           >
-            L&rsquo;Étude Ogoula Nkondawiri accompagne particuliers, entreprises et institutions au
-            Gabon depuis 2012. Sécurité juridique, discrétion et excellence pour vos opérations
-            les plus structurantes.
+            {t.hero.subtitle}
           </motion.p>
 
           <motion.div {...fade(0.3)} className="flex flex-col sm:flex-row gap-3 sm:gap-4">
@@ -65,16 +63,16 @@ export default function Hero() {
             >
               <Link to="/rendez-vous">
                 <Calendar className="w-4 h-4 mr-2" />
-                Prendre rendez-vous
+                {t.hero.cta1}
               </Link>
             </Button>
             <Button
               asChild
               variant="outline"
               size="lg"
-              className="border border-white/40 bg-transparent text-white hover:bg-cream hover:text-navy font-medium tracking-wider uppercase text-xs px-7 h-12 rounded-none"
+              className="border border-white/40 bg-transparent text-white hover:bg-white hover:text-navy font-medium tracking-wider uppercase text-xs px-7 h-12 rounded-none"
             >
-              <Link to="/etude">Découvrir l&rsquo;Étude</Link>
+              <Link to="/etude">{t.hero.cta2}</Link>
             </Button>
           </motion.div>
 
@@ -82,14 +80,13 @@ export default function Hero() {
             {...fade(0.4)}
             className="mt-14 sm:mt-16 flex flex-wrap items-center gap-x-8 gap-y-4 text-white/55"
           >
-            <Item icon={<MapPin className="w-3.5 h-3.5" />}>Bd de la Nation, Imm. Hollando</Item>
-            <Item icon={<Phone className="w-3.5 h-3.5" />}>011 77 37 35</Item>
-            <Item>OHADA · Depuis 2012</Item>
+            <Item icon={<MapPin className="w-3.5 h-3.5" />}>{t.hero.badge1}</Item>
+            <Item icon={<Phone className="w-3.5 h-3.5" />}>{t.hero.badge2}</Item>
+            <Item>{t.hero.badge3}</Item>
           </motion.div>
         </div>
       </div>
 
-      {/* Decorative bottom rule */}
       <div className="absolute bottom-0 left-0 right-0 h-px bg-gold/30" />
     </section>
   )
