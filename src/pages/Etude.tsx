@@ -19,7 +19,7 @@ export default function Etude() {
             Une étude notariale au cœur de Libreville
           </h1>
           <p className="mt-6 text-lg text-gray-300">
-            Depuis 2005, l'Étude Notariale Suzanne Ogoula Nkondawiri accompagne particuliers, familles
+            Depuis 2012, l'Étude Notariale Suzanne Ogoula Nkondawiri accompagne particuliers, familles
             et entreprises du Gabon dans la sécurisation de leurs actes les plus importants.
           </p>
         </div>

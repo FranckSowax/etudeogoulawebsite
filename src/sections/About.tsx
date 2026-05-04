@@ -27,7 +27,7 @@ export default function About() {
                 </div>
                 <div>
                   <p className="font-serif font-bold text-navy">Notaire</p>
-                  <p className="text-sm text-muted-foreground">Depuis 2005</p>
+                  <p className="text-sm text-muted-foreground">Depuis 2012</p>
                 </div>
               </div>
             </div>
