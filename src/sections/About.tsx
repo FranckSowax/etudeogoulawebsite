@@ -15,19 +15,19 @@ export default function About() {
         }
 
   return (
-    <section id="a-propos" aria-label="L'Étude" className="bg-paper py-20 sm:py-28">
+    <section id="a-propos" aria-label="L'Étude" className="bg-cream py-20 sm:py-28">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid lg:grid-cols-12 gap-10 lg:gap-16 items-start">
           <motion.div className="lg:col-span-5" {...fade(0)}>
             <div className="relative">
               <img
-                src="/notary-portrait.jpg"
-                alt="Étude Notariale Suzanne Ogoula Nkondawiri à Libreville"
+                src="/services-legal.jpg"
+                alt="Acte authentique, sceau et plume — Étude Ogoula Nkondawiri"
                 className="w-full aspect-[4/5] object-cover rounded-sm shadow-elegant"
                 loading="lazy"
               />
-              <div className="absolute -bottom-5 -right-5 w-40 h-40 border border-bronze/40 -z-10" />
-              <div className="absolute -top-5 -left-5 w-24 h-24 bg-bronze/10 -z-10" />
+              <div className="absolute -bottom-5 -right-5 w-40 h-40 border border-gold/40 -z-10" />
+              <div className="absolute -top-5 -left-5 w-24 h-24 bg-gold/10 -z-10" />
             </div>
           </motion.div>
 
@@ -37,7 +37,7 @@ export default function About() {
               Une référence notariale au cœur de Libreville.
             </SectionTitle>
 
-            <div className="text-graphite leading-relaxed space-y-5">
+            <div className="text-muted-foreground leading-relaxed space-y-5">
               <p>
                 Établie sur le Boulevard de la Nation, dans l&rsquo;Immeuble Hollando, l&rsquo;Étude
                 Ogoula Nkondawiri figure parmi les études notariales de référence en République

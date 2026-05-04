@@ -13,12 +13,12 @@ type Props = {
 export default function GoldLink({ to, href, children, className }: Props) {
   const inner = (
     <span className={cn(
-      'group inline-flex items-center gap-2 text-bronze hover:text-ink transition-colors text-sm font-medium tracking-wider uppercase',
+      'group inline-flex items-center gap-2 text-gold hover:text-navy transition-colors text-sm font-medium tracking-wider uppercase',
       className,
     )}>
       <span className="relative">
         {children}
-        <span className="absolute left-0 -bottom-0.5 w-full h-px bg-bronze origin-left scale-x-30 group-hover:scale-x-100 transition-transform duration-300" />
+        <span className="absolute left-0 -bottom-0.5 w-full h-px bg-gold origin-left scale-x-30 group-hover:scale-x-100 transition-transform duration-300" />
       </span>
       <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-1" />
     </span>

@@ -20,15 +20,15 @@ const LEGAL = [
 
 export default function Footer() {
   return (
-    <footer className="bg-ink text-paper pt-16 pb-safe">
+    <footer className="bg-navy text-white pt-16 pb-safe">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
           {/* Monogram */}
           <div>
-            <Link to="/" className="inline-block mb-5 text-bronze">
+            <Link to="/" className="inline-block mb-5 text-gold">
               <MonogramSON size={88} />
             </Link>
-            <p className="text-paper/55 text-sm leading-relaxed max-w-xs">
+            <p className="text-white/55 text-sm leading-relaxed max-w-xs">
               Étude Notariale<br />
               Suzanne Ogoula Nkondawiri<br />
               Libreville · République Gabonaise
@@ -37,13 +37,13 @@ export default function Footer() {
 
           {/* Navigation */}
           <div>
-            <h4 className="text-[11px] tracking-[0.22em] uppercase text-bronze font-medium mb-5">
+            <h4 className="text-[11px] tracking-[0.22em] uppercase text-gold font-medium mb-5">
               Navigation
             </h4>
             <ul className="space-y-3">
               {NAV.map((n) => (
                 <li key={n.to}>
-                  <Link to={n.to} className="text-paper/65 hover:text-paper text-sm transition-colors">
+                  <Link to={n.to} className="text-white/65 hover:text-white text-sm transition-colors">
                     {n.label}
                   </Link>
                 </li>
@@ -53,7 +53,7 @@ export default function Footer() {
 
           {/* Pôles */}
           <div>
-            <h4 className="text-[11px] tracking-[0.22em] uppercase text-bronze font-medium mb-5">
+            <h4 className="text-[11px] tracking-[0.22em] uppercase text-gold font-medium mb-5">
               Pôles de compétences
             </h4>
             <ul className="space-y-3">
@@ -61,7 +61,7 @@ export default function Footer() {
                 <li key={e.slug}>
                   <Link
                     to={`/expertises/${e.slug}`}
-                    className="text-paper/65 hover:text-paper text-sm transition-colors"
+                    className="text-white/65 hover:text-white text-sm transition-colors"
                   >
                     {e.shortTitle}
                   </Link>
@@ -72,13 +72,13 @@ export default function Footer() {
 
           {/* Legal */}
           <div>
-            <h4 className="text-[11px] tracking-[0.22em] uppercase text-bronze font-medium mb-5">
+            <h4 className="text-[11px] tracking-[0.22em] uppercase text-gold font-medium mb-5">
               Mentions
             </h4>
             <ul className="space-y-3">
               {LEGAL.map((l) => (
                 <li key={l.to}>
-                  <Link to={l.to} className="text-paper/65 hover:text-paper text-sm transition-colors">
+                  <Link to={l.to} className="text-white/65 hover:text-white text-sm transition-colors">
                     {l.label}
                   </Link>
                 </li>
@@ -87,7 +87,7 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="border-t border-bronze/30 pt-6 flex flex-col md:flex-row justify-between items-center gap-3 text-xs text-paper/50">
+        <div className="border-t border-gold/30 pt-6 flex flex-col md:flex-row justify-between items-center gap-3 text-xs text-white/50">
           <p>
             © {new Date().getFullYear()} Étude Notariale Suzanne Ogoula Nkondawiri · Tous droits réservés
           </p>

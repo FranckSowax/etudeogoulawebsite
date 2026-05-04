@@ -40,20 +40,20 @@ const POLES = [
 export default function Services() {
   const reduce = useReducedMotion()
   return (
-    <section id="services" aria-label="Pôles de compétences" className="bg-ink text-paper py-20 sm:py-28">
+    <section id="services" aria-label="Pôles de compétences" className="bg-navy text-white py-20 sm:py-28">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-3xl mx-auto mb-14 sm:mb-20">
           <Eyebrow align="center" tone="paper" className="mb-5 justify-center">Expertise</Eyebrow>
-          <h2 className="font-serif font-medium text-paper [font-size:clamp(1.875rem,3.6vw,3rem)] leading-[1.08] tracking-[-0.01em] mb-6">
+          <h2 className="font-serif font-medium text-white [font-size:clamp(1.875rem,3.6vw,3rem)] leading-[1.08] tracking-[-0.01em] mb-6">
             Six pôles de compétences au service de votre sécurité juridique.
           </h2>
-          <p className="text-paper/65 leading-relaxed">
+          <p className="text-white/65 leading-relaxed">
             De la transaction immobilière à l&rsquo;ingénierie patrimoniale, l&rsquo;Étude intervient
             sur l&rsquo;ensemble des actes notariés relevant du droit gabonais et de l&rsquo;espace OHADA.
           </p>
         </div>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 border-t border-l border-bronze/30">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 border-t border-l border-gold/30">
           {POLES.map((p, i) => (
             <motion.div
               key={p.slug}
@@ -61,22 +61,22 @@ export default function Services() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-50px' }}
               transition={{ duration: 0.45, delay: (i % 3) * 0.06, ease: 'easeOut' }}
-              className="border-r border-b border-bronze/30"
+              className="border-r border-b border-gold/30"
             >
               <Link
                 to={`/expertises/${p.slug}`}
-                className="group block p-7 sm:p-8 h-full hover:bg-bronze/[0.06] transition-colors relative"
+                className="group block p-7 sm:p-8 h-full hover:bg-gold/[0.06] transition-colors relative"
               >
-                <span className="text-bronze font-serif text-sm tracking-[0.2em]">
+                <span className="text-gold font-serif text-sm tracking-[0.2em]">
                   0{i + 1}
                 </span>
-                <h3 className="mt-4 font-serif font-medium text-paper text-xl sm:text-2xl leading-tight mb-4">
+                <h3 className="mt-4 font-serif font-medium text-white text-xl sm:text-2xl leading-tight mb-4">
                   {p.title}
                 </h3>
-                <p className="text-paper/65 text-sm leading-relaxed mb-6">
+                <p className="text-white/65 text-sm leading-relaxed mb-6">
                   {p.desc}
                 </p>
-                <span className="inline-flex items-center gap-2 text-bronze text-[11px] tracking-[0.22em] uppercase font-medium">
+                <span className="inline-flex items-center gap-2 text-gold text-[11px] tracking-[0.22em] uppercase font-medium">
                   En savoir plus
                   <ArrowRight className="w-3 h-3 transition-transform group-hover:translate-x-1" />
                 </span>

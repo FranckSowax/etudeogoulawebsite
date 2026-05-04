@@ -14,7 +14,7 @@ const ITEMS = [
 export default function Clientele() {
   const reduce = useReducedMotion()
   return (
-    <section aria-label="Notre clientèle" className="bg-paper py-16 sm:py-20">
+    <section aria-label="Notre clientèle" className="bg-cream py-16 sm:py-20">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-10 sm:mb-14">
           <Eyebrow align="center" className="mb-4">Clientèle</Eyebrow>
@@ -31,9 +31,9 @@ export default function Clientele() {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true, margin: '-50px' }}
               transition={{ duration: 0.4, delay: i * 0.05, ease: 'easeOut' }}
-              className="flex items-center gap-3 py-3 border-b border-bronze/20 text-graphite"
+              className="flex items-center gap-3 py-3 border-b border-gold/20 text-muted-foreground"
             >
-              <span aria-hidden className="block w-1.5 h-1.5 bg-bronze rotate-45 flex-shrink-0" />
+              <span aria-hidden className="block w-1.5 h-1.5 bg-gold rotate-45 flex-shrink-0" />
               <span className="font-serif text-lg">{item}</span>
             </motion.li>
           ))}

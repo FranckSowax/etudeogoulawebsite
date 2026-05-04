@@ -16,7 +16,7 @@ export default function NotaireMessage() {
         }
 
   return (
-    <section aria-label="Le mot du Notaire" className="bg-paper py-20 sm:py-28">
+    <section aria-label="Le mot du Notaire" className="bg-cream py-20 sm:py-28">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid lg:grid-cols-5 gap-10 lg:gap-16 items-start">
           {/* Portrait */}
@@ -28,7 +28,7 @@ export default function NotaireMessage() {
                 className="w-full max-w-sm grayscale aspect-[4/5] object-cover rounded-sm shadow-elegant"
                 loading="lazy"
               />
-              <div className="absolute -bottom-4 -right-4 w-32 h-32 border border-bronze/40 -z-10" />
+              <div className="absolute -bottom-4 -right-4 w-32 h-32 border border-gold/40 -z-10" />
             </div>
           </motion.div>
 
@@ -38,11 +38,11 @@ export default function NotaireMessage() {
             <SectionTitle className="mb-2">
               Maître Suzanne Ogoula Nkondawiri.
             </SectionTitle>
-            <p className="font-serif italic text-graphite [font-size:clamp(1.125rem,1.6vw,1.375rem)] mb-8">
+            <p className="font-serif italic text-muted-foreground [font-size:clamp(1.125rem,1.6vw,1.375rem)] mb-8">
               Notaire titulaire de l&rsquo;Étude depuis 2012.
             </p>
 
-            <div className="prose prose-neutral max-w-none text-graphite leading-relaxed space-y-5">
+            <div className="prose prose-neutral max-w-none text-muted-foreground leading-relaxed space-y-5">
               <p>
                 Maître Suzanne Ogoula Nkondawiri exerce le notariat à Libreville depuis 2012,
                 après avoir prêté serment devant la Cour d&rsquo;Appel de Libreville. Diplômée

@@ -12,7 +12,7 @@ export default function SectionTitle({ children, className, as: Tag = 'h2', alig
   return (
     <Tag
       className={cn(
-        'font-serif font-medium text-ink leading-[1.08] tracking-[-0.01em]',
+        'font-serif font-medium text-navy leading-[1.08] tracking-[-0.01em]',
         '[font-size:clamp(1.875rem,3.6vw,3rem)]',
         align === 'center' && 'text-center mx-auto',
         'max-w-[28ch]',

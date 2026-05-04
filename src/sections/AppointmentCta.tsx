@@ -15,14 +15,14 @@ const STEPS = [
 export default function AppointmentCta() {
   const reduce = useReducedMotion()
   return (
-    <section id="rendez-vous" aria-label="Prendre rendez-vous" className="bg-paper py-20 sm:py-28">
+    <section id="rendez-vous" aria-label="Prendre rendez-vous" className="bg-cream py-20 sm:py-28">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-3xl mx-auto mb-14 sm:mb-20">
           <Eyebrow align="center" className="mb-5 justify-center">Rendez-vous</Eyebrow>
           <SectionTitle align="center" className="mx-auto mb-6">
             Réserver un entretien en quatre étapes.
           </SectionTitle>
-          <p className="text-graphite/80 leading-relaxed">
+          <p className="text-muted-foreground/80 leading-relaxed">
             À l&rsquo;Étude, en visioconférence ou par téléphone — confirmation WhatsApp et rappels
             automatiques J-1 et H-2.
           </p>
@@ -38,14 +38,14 @@ export default function AppointmentCta() {
               transition={{ duration: 0.45, delay: i * 0.08, ease: 'easeOut' }}
               className={
                 'relative pl-0 ' +
-                (i < 3 ? 'lg:border-r lg:border-bronze/25 lg:pr-10' : '')
+                (i < 3 ? 'lg:border-r lg:border-gold/25 lg:pr-10' : '')
               }
             >
-              <span className="block font-serif text-bronze [font-size:clamp(2.5rem,4vw,3.5rem)] leading-none mb-4">
+              <span className="block font-serif text-gold [font-size:clamp(2.5rem,4vw,3.5rem)] leading-none mb-4">
                 0{i + 1}
               </span>
-              <h3 className="font-serif text-ink text-xl mb-2 leading-tight">{title}</h3>
-              <p className="text-graphite/75 text-sm leading-relaxed">{desc}</p>
+              <h3 className="font-serif text-navy text-xl mb-2 leading-tight">{title}</h3>
+              <p className="text-muted-foreground/75 text-sm leading-relaxed">{desc}</p>
             </motion.li>
           ))}
         </ol>
@@ -54,7 +54,7 @@ export default function AppointmentCta() {
           <Button
             asChild
             size="lg"
-            className="bg-ink hover:bg-graphite text-paper font-medium tracking-wider uppercase text-xs px-8 h-12 rounded-none"
+            className="bg-navy hover:bg-graphite text-white font-medium tracking-wider uppercase text-xs px-8 h-12 rounded-none"
           >
             <Link to="/rendez-vous">
               <Calendar className="w-4 h-4 mr-2" />

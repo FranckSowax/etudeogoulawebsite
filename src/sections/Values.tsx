@@ -18,7 +18,7 @@ const VALUES = [
 export default function Values() {
   const reduce = useReducedMotion()
   return (
-    <section aria-label="Nos valeurs" className="bg-ink text-paper py-16 sm:py-20">
+    <section aria-label="Nos valeurs" className="bg-navy text-white py-16 sm:py-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid sm:grid-cols-3 gap-10 sm:gap-0">
           {VALUES.map((v, i) => (
@@ -30,13 +30,13 @@ export default function Values() {
               transition={{ duration: 0.5, delay: i * 0.08, ease: 'easeOut' }}
               className={
                 'text-center px-6 py-2 ' +
-                (i < VALUES.length - 1 ? 'sm:border-r sm:border-bronze/40' : '')
+                (i < VALUES.length - 1 ? 'sm:border-r sm:border-gold/40' : '')
               }
             >
-              <h3 className="font-serif font-medium text-paper [font-size:clamp(1.5rem,3vw,2.25rem)] leading-tight mb-3">
+              <h3 className="font-serif font-medium text-white [font-size:clamp(1.5rem,3vw,2.25rem)] leading-tight mb-3">
                 {v.title}
               </h3>
-              <p className="text-paper/60 text-sm italic leading-relaxed max-w-xs mx-auto">
+              <p className="text-white/60 text-sm italic leading-relaxed max-w-xs mx-auto">
                 {v.sub}
               </p>
             </motion.div>
